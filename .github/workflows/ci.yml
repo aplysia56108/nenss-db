@@ -1,0 +1,24 @@
+name: CI
+on:
+  pull_request
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
+      - name: Install npm dependency
+        run: npm install
+      - name: Run ESLint
+        run: npm run lint
+      - name: Run Jest
+        run: npm run test
+      - name: Run Jest coverage
+        uses: Artiomtr/jest-coverage-report-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          test-script: npm run ci:test:coverage

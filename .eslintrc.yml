@@ -1,0 +1,81 @@
+env:
+  browser: true
+  es2021: true
+  node: true
+extends:
+  - eslint:recommended
+  - plugin:@typescript-eslint/recommended
+  - prettier
+ignorePatterns: ["dist", '/*.js']
+parser: '@typescript-eslint/parser'
+parserOptions:
+  project: tsconfig.json
+plugins:
+  - prettier
+rules:
+  '@typescript-eslint/naming-convention':
+    - error
+    - 
+      selector: variable
+      format:
+        - camelCase
+        - UPPER_CASE
+    - 
+      selector: function
+      format:
+        - camelCase
+    -
+      selector: variable
+      types:
+        - boolean
+      format:
+        - PascalCase
+        - UPPER_CASE
+      prefix:
+        - is
+        - should
+        - do
+        - does
+        - did
+        - can
+        - will
+        - would
+        - has
+        - have
+        - IS_
+        - SHOULD_
+        - DO_
+        - DOES_
+        - DID_
+        - CAN_
+        - WILL_
+        - WOULD_
+        - HAS_
+        - HAVE_
+    - 
+      selector: parameter
+      format:
+        - camelCase
+      leadingUnderscore: allow
+    -
+      selector:
+        - typeAlias
+        - class
+      format:
+        - PascalCase
+    - 
+      selector: interface
+      format: 
+        - PascalCase
+      custom:
+        regex: ^I[A-Z]
+        match: true
+  '@typescript-eslint/no-unused-vars':
+    - warn
+    - argsIgnorePattern: "^_"
+  no-console:
+    - warn
+  eqeqeq:
+    - error
+  prettier/prettier:
+    - error

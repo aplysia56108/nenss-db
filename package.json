@@ -1,0 +1,29 @@
+{
+  "name": "tsdb-draft",
+  "version": "0.0.1",
+  "type": "module",
+  "target": "node",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "npm run build && node dist/index.js",
+    "build": "tsc --project tsconfig.base.json",
+    "lint": "eslint --ext .jsx,.js,.tsx,.ts .",
+    "lint:fix": "eslint --fix --ext .jsx,.js,.tsx,.ts .",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "ci:test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage --silent --ci --testLocationInResults --json --outputFile=\"report.json\""
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^28.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.10.1",
+    "eslint": "^8.7.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^28.0.0",
+    "prettier": "^2.5.1",
+    "ts-jest": "^28.0.0",
+    "typescript": "^4.6.3"
+  }
+}
