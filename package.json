@@ -7,8 +7,8 @@
   "scripts": {
     "start": "npm run build && node dist/index.js",
     "build": "tsc --project tsconfig.base.json",
-    "lint": "eslint --ext .jsx,.js,.tsx,.ts .",
-    "lint:fix": "eslint --fix --ext .jsx,.js,.tsx,.ts .",
+    "lint": "eslint 'src/**/*.ts' 'tests/**/*.ts'",
+    "lint:fix": "eslint --fix 'src/**/*.ts' 'tests/**/*.ts'",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "ci:test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage --silent --ci --testLocationInResults --json --outputFile=\"report.json\""
