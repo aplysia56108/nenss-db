@@ -18,7 +18,7 @@ interface ITsdb {
    * @param ref the reference to the data
    * @param data the data to save
    */
-  update<T = any>(ref: string, data: T): Promise<void>;
+  update<T = any>(ref: string, data: Partial<T>): Promise<void>;
 
   /**
    * Creating a new node at that path if it does not already exist and returns a reference key to the new node.
