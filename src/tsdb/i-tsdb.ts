@@ -1,3 +1,5 @@
+import { ISnapshot } from '../snapshot';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface ITsdb {
   /**
@@ -39,7 +41,10 @@ interface ITsdb {
    * @param ref the reference to the data
    * @param callback the callback to call when the data has been committed
    */
-  subscribe<T = any>(ref: string, callback: (data: T) => void): string;
+  subscribe<T = any>(
+    ref: string,
+    callback: (snapshot: ISnapshot<T>) => void
+  ): string;
 
   /**
    * Remove a subscription.
