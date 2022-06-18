@@ -24,13 +24,12 @@ test('Check random part', () => {
 
 test('Check timestamp part', async () => {
   const mockRandom = jest.spyOn(Math, 'random').mockReturnValue(0);
-  const waitOneMillisecond = () =>
-    new Promise((resolve) => setTimeout(resolve, 5));
+  const wait = () => new Promise((resolve) => setTimeout(resolve, 5));
   const uniqueKeyNumber = 100;
   const uniqueKeyList = [];
   for (let i = 0; i < uniqueKeyNumber; i++) {
     uniqueKeyList.push(UniqueKey.generate());
-    await waitOneMillisecond();
+    await wait();
   }
   const uniqueKeySet = new Set(uniqueKeyList);
   expect(uniqueKeySet.size).toBe(uniqueKeyNumber);
