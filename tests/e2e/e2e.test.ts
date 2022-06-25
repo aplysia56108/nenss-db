@@ -139,7 +139,7 @@ describe.skip('E2E Tests', () => {
     expect(keys).toEqual(['0', '1', '2']);
     expect(arrayVal['0']).toEqual('zero');
     expect(arrayVal['1']).toEqual('one');
-    expect(arrayVal['2']).toEqual('three');
+    expect(arrayVal['2']).toEqual('two');
   });
 
   test('Push test', async () => {
