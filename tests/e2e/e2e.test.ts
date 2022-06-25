@@ -32,7 +32,7 @@ describe.skip('E2E Tests', () => {
     const orangeCallback = jest.fn(callback);
     const orangePriceCallback = jest.fn(callback);
 
-    tsdb.subscribe('/', rootCallback);
+    const rootSubscriptionId = tsdb.subscribe('/', rootCallback);
     tsdb.subscribe('/tomato', tomatoCallback);
 
     const sampleData = {
@@ -49,7 +49,7 @@ describe.skip('E2E Tests', () => {
     };
     await tsdb.set('/', sampleData);
 
-    const rootSubscriptionId = tsdb.subscribe('/apple', appleCallback);
+    tsdb.subscribe('/apple', appleCallback);
 
     const rootData = await tsdb.get<typeof sampleData>('/');
     expect(rootData).toEqual(sampleData);
@@ -123,7 +123,7 @@ describe.skip('E2E Tests', () => {
 
   test('Set and get array test', async () => {
     const tsdb = createNewTsdb();
-    const sampleArray = ['zero', 'one', 'three'];
+    const sampleArray = ['zero', 'one', 'two'];
 
     await tsdb.set('/array', sampleArray);
 
@@ -133,7 +133,7 @@ describe.skip('E2E Tests', () => {
     expect(keys).toEqual(['0', '1', '2']);
     expect(arrayData['0']).toEqual('zero');
     expect(arrayData['1']).toEqual('one');
-    expect(arrayData['2']).toEqual('three');
+    expect(arrayData['2']).toEqual('two');
   });
 
   test('Push test', async () => {
