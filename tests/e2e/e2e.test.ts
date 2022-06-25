@@ -17,11 +17,13 @@ const callback = <T = any>(_snapshot: ISnapshot<T>): void => {
 describe.skip('E2E Tests', () => {
   test('Read empty db test', async () => {
     const tsdb = createNewTsdb();
-    const rootData = tsdb.get('/');
-    expect(rootData).toBe(null);
+    const rootData = await tsdb.get('/');
+    expect(rootData.exists()).toBe(false);
+    expect(rootData.val()).toBe(null);
 
-    const someRefData = tsdb.get('/some/ref');
-    expect(someRefData).toBe(null);
+    const someRefData = await tsdb.get('/some/ref');
+    expect(someRefData.exists()).toBe(false);
+    expect(someRefData.val()).toBe(null);
   });
 
   test('Set and get map test', async () => {
@@ -32,7 +34,7 @@ describe.skip('E2E Tests', () => {
     const orangeCallback = jest.fn(callback);
     const orangePriceCallback = jest.fn(callback);
 
-    tsdb.subscribe('/', rootCallback);
+    const rootSubscriptionId = tsdb.subscribe('/', rootCallback);
     tsdb.subscribe('/tomato', tomatoCallback);
 
     const sampleData = {
@@ -49,7 +51,7 @@ describe.skip('E2E Tests', () => {
     };
     await tsdb.set('/', sampleData);
 
-    const rootSubscriptionId = tsdb.subscribe('/apple', appleCallback);
+    tsdb.subscribe('/apple', appleCallback);
 
     const rootData = await tsdb.get<typeof sampleData>('/');
     expect(rootData).toEqual(sampleData);
@@ -123,17 +125,21 @@ describe.skip('E2E Tests', () => {
 
   test('Set and get array test', async () => {
     const tsdb = createNewTsdb();
-    const sampleArray = ['zero', 'one', 'three'];
+    const sampleArray = ['zero', 'one', 'two'];
 
     await tsdb.set('/array', sampleArray);
 
     const arrayData = await tsdb.get('/array');
 
-    const keys = Object.keys(arrayData);
+    expect(arrayData.exists()).toBe(true);
+
+    const arrayVal = arrayData.val();
+
+    const keys = Object.keys(arrayVal);
     expect(keys).toEqual(['0', '1', '2']);
-    expect(arrayData['0']).toEqual('zero');
-    expect(arrayData['1']).toEqual('one');
-    expect(arrayData['2']).toEqual('three');
+    expect(arrayVal['0']).toEqual('zero');
+    expect(arrayVal['1']).toEqual('one');
+    expect(arrayVal['2']).toEqual('two');
   });
 
   test('Push test', async () => {
@@ -150,11 +156,15 @@ describe.skip('E2E Tests', () => {
     }
 
     const arrayData = await tsdb.get('/array');
-    const keys = Object.keys(arrayData);
+
+    expect(arrayData.exists()).toBe(true);
+
+    const arrayVal = arrayData.val();
+    const keys = Object.keys(arrayVal);
     expect(keys.length).toBe(PUSH_NUMBER);
     expect(pushCallback.mock.calls.length).toBe(PUSH_NUMBER);
     for (let i = 0; i < PUSH_NUMBER; i++) {
-      expect(arrayData[keys[i]]).toEqual(`data: {${i}}`);
+      expect(arrayVal[keys[i]]).toEqual(`data: {${i}}`);
       expect(pushCallback.mock.calls[i][0].val()).toEqual(`data: {${i}}`);
     }
   });

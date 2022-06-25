@@ -6,7 +6,7 @@ interface ITsdb {
    * Get a snapshot of the data from the database.
    * @param ref the reference to the data
    */
-  get<T = any>(ref: string): Promise<T>;
+  get<T = any>(ref: string): Promise<ISnapshot<T>>;
 
   /**
    * Save data to a specified reference, replacing any existing data at that path.
