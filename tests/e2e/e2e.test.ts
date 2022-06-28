@@ -54,16 +54,20 @@ describe.skip('E2E Tests', () => {
     tsdb.subscribe('/apple', appleCallback);
 
     const rootData = await tsdb.get<typeof sampleData>('/');
-    expect(rootData).toEqual(sampleData);
+    expect(rootData.exists()).toBe(true);
+    expect(rootData.val()).toEqual(sampleData);
 
     const appleData = await tsdb.get('/apple');
-    expect(appleData).toEqual(sampleData.apple);
+    expect(appleData.exists()).toBe(true);
+    expect(appleData.val()).toEqual(sampleData.apple);
 
     const appleColorData = await tsdb.get('/apple/color');
-    expect(appleColorData).toEqual(sampleData.apple.color);
+    expect(appleColorData.exists()).toBe(true);
+    expect(appleColorData.val()).toEqual(sampleData.apple.color);
 
     const orangeDataBeforeSet = await tsdb.get('/orange');
-    expect(orangeDataBeforeSet).toBe(null);
+    expect(orangeDataBeforeSet.exists()).toBe(false);
+    expect(orangeDataBeforeSet.val()).toBe(null);
 
     const orangeData = {
       color: 'orange',
@@ -75,7 +79,8 @@ describe.skip('E2E Tests', () => {
     tsdb.unsubscribe(rootSubscriptionId);
 
     const orangeDataAfterSet = await tsdb.get('/orange');
-    expect(orangeDataAfterSet).toEqual(orangeData);
+    expect(orangeDataAfterSet.exists()).toBe(true);
+    expect(orangeDataAfterSet.val()).toEqual(orangeData);
 
     tsdb.subscribe('/orange', orangeCallback);
     tsdb.subscribe('/orange/price', orangePriceCallback);
@@ -149,6 +154,8 @@ describe.skip('E2E Tests', () => {
     const PUSH_NUMBER = 10;
 
     const pushCallback = jest.fn(callback);
+
+    tsdb.subscribe('/array', pushCallback);
 
     for (let i = 0; i < PUSH_NUMBER; i++) {
       await tsdb.push('/array', `data: {i}`);
