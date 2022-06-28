@@ -3,7 +3,6 @@ on:
   pull_request
 jobs:
   build:
-    name: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -17,6 +16,8 @@ jobs:
         run: npm run lint
       - name: Run Jest
         run: npm run test
+      - name: Run build test
+        run: npm run build:prod
       - name: Run Jest coverage
         uses: Artiomtr/jest-coverage-report-action@v2
         with:

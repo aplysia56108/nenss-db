@@ -1,17 +1,20 @@
 {
   "name": "tsdb-draft",
   "version": "0.0.1",
-  "type": "module",
   "target": "node",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
-    "start": "ncc run src/index.ts",
-    "build": "ncc build -m src/index.ts",
+    "start": "ncc run",
+    "build": "ncc build -s",
+    "build:prod": "ncc build -m",
     "lint": "eslint 'src/**/*.ts' 'tests/**/*.ts'",
     "lint:fix": "eslint --fix 'src/**/*.ts' 'tests/**/*.ts'",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
-    "ci:test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage --silent --ci --testLocationInResults --json --outputFile=\"report.json\""
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "ci:test:coverage": "jest --coverage --silent --ci --testLocationInResults --json --outputFile=\"report.json\""
   },
   "license": "MIT",
   "devDependencies": {
@@ -25,6 +28,25 @@
     "jest": "^28.0.0",
     "prettier": "^2.5.1",
     "ts-jest": "^28.0.0",
+    "ts-node": "^10.8.1",
     "typescript": "^4.6.3"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "./",
+    "testRegex": ".*\\.test\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "./src/**/*.(t|j)s",
+      "!**/node_modules/**"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
   }
 }

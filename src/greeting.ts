@@ -1,4 +1,4 @@
-import Message from './message.js';
+import Message from './message';
 
 class Greeting {
   public static sayHello(name: string) {

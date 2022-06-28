@@ -1,3 +1,3 @@
-import NullChildRefferedError from './null-child-reffered-error.js';
+import NullChildRefferedError from './null-child-reffered-error';
 
 export { NullChildRefferedError };

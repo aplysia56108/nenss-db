@@ -1,5 +1,5 @@
-import Node from '../node/index.js';
-import Inner from '../inner/index.js';
+import Node from '../node/index';
+import Inner from '../inner/index';
 
 class Leaf<T, U> extends Node<T, U> {
   keys: T[];

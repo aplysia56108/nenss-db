@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import UniqueKey from '../../../src/common/unique-key/index.js';
+import UniqueKey from '../../../src/common/unique-key/index';
 
 test('Check unique key type test', () => {
   const uniqueKey = UniqueKey.generate();
