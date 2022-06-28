@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
-import Greeting from '../src/greeting.js';
-import Message from '../src/message.js';
+import Greeting from '../src/greeting';
+import Message from '../src/message';
 
 test('sayHelloTest', () => {
   const mockGetHello = jest.fn((name: string) => `Hi ${name}!`);

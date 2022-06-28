@@ -1,3 +1,3 @@
-import Greeting from './greeting.js';
+import Greeting from './greeting';
 
 Greeting.sayHello('TypeScript');

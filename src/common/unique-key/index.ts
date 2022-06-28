@@ -1,3 +1,3 @@
-import UniqueKey from './unique-key.js';
+import UniqueKey from './unique-key';
 
 export default UniqueKey;

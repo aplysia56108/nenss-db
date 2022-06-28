@@ -1,3 +1,3 @@
-import Leaf from './leaf.js';
+import Leaf from './leaf';
 
 export default Leaf;

@@ -1,28 +1,18 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "type": "pwa-node",
+  "configurations": [{
+      "type": "node",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**",
+      ],
       "request": "launch",
       "name": "Launch Program",
-      "skipFiles": [
-        "<node_internals>/**"
+      "runtimeArgs": [
+          "-r",
+          "ts-node/register"
       ],
-      "program": "${file}",
-      "outFiles": [
-        "${workspaceFolder}/**/*.js"
+      "args": [
+          "${file}"
       ]
-    },
-    {
-        "type": "node",
-        "request": "launch",
-        "name": "Launch TypeScript",
-        "preLaunchTask": "Compile TypeScript",
-        "cwd": "${workspaceFolder}",
-        "program": "${file}",
-        "outFiles": [
-            "${workspaceFolder}/dist/**/*.js"
-        ]
-    }
-  ]
+  }],
 }

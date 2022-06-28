@@ -1,4 +1,4 @@
-import Inner from '../inner/index.js';
+import Inner from '../inner/index';
 
 class Node<T, U> {
   keys: T[];

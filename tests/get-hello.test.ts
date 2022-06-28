@@ -1,4 +1,4 @@
-import Message from '../src/message.js';
+import Message from '../src/message';
 
 test('getHelloWithCorrectName', () => {
   const name = 'Test';
