@@ -43,7 +43,7 @@ interface ITsdb {
    */
   subscribe<T = any>(
     ref: string,
-    callback: (snapshot: ISnapshot<T>) => void
+    callback: (snapshot: ISnapshot<T>) => void,
   ): string;
 
   /**
