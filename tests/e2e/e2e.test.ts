@@ -153,17 +153,9 @@ describe.skip('E2E Tests', () => {
     const pushCallback = jest.fn(callback);
 
     tsdb.subscribe('/array', pushCallback);
-    const maps: { [key: string]: string }[] = new Array(PUSH_NUMBER);
 
     for (let i = 0; i < PUSH_NUMBER; i++) {
-      maps[i] = {};
-    }
-
-    for (let i = 0; i < PUSH_NUMBER; i++) {
-      const key = await tsdb.push('/array', `data: {${i}}`);
-      for (let j = i; j < PUSH_NUMBER; j++) {
-        maps[j][key] = `data: {${i}}`;
-      }
+      await tsdb.push('/array', `data: {${i}}`);
       await wait();
     }
 
@@ -176,8 +168,8 @@ describe.skip('E2E Tests', () => {
     expect(keys.length).toBe(PUSH_NUMBER);
     expect(pushCallback.mock.calls.length).toBe(PUSH_NUMBER);
     for (let i = 0; i < PUSH_NUMBER; i++) {
-      expect(arrayVal[keys[i]]).toEqual(maps[i][keys[i]]);
-      expect(pushCallback.mock.calls[i][0].val()).toEqual(maps[i]);
+      expect(arrayVal[keys[i]]).toEqual(`data: {${i}}`);
+      expect(pushCallback.mock.calls[i][0].val()).toEqual(`data: {${i}}`);
     }
   });
 
