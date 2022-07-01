@@ -155,7 +155,7 @@ describe.skip('E2E Tests', () => {
     tsdb.subscribe('/array', pushCallback);
 
     for (let i = 0; i < PUSH_NUMBER; i++) {
-      await tsdb.push('/array', `data: {i}`);
+      await tsdb.push('/array', `data: {${i}}`);
       await wait();
     }
 
