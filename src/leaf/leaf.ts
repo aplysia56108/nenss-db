@@ -3,7 +3,7 @@ import Inner from '../inner/index';
 
 class Leaf<T, U> extends Node<T, U> {
   keys: T[];
-  items: U[];
+  items: (U | null)[];
   prev: Leaf<T, U> | null;
   next: Leaf<T, U> | null;
   constructor(order: number) {
@@ -14,6 +14,25 @@ class Leaf<T, U> extends Node<T, U> {
     this.items = new Array(order - 1);
     this.prev = null;
     this.next = null;
+  }
+
+  getKey(i: number): T {
+    if (i < 0 || i >= this.numberOfKey) {
+      throw Error('invalid iterator.');
+    }
+    const key = this.keys[i];
+    return key;
+  }
+
+  getItem(i: number): U {
+    if (i < 0 || i >= this.numberOfKey) {
+      throw Error('invalid iterator.');
+    }
+    const item = this.items[i];
+    if (item === null) {
+      throw Error('unexpected null item.');
+    }
+    return item;
   }
 
   insert(i: number, key: T, item: U): void {
@@ -75,6 +94,7 @@ class Leaf<T, U> extends Node<T, U> {
     for (let j = preIndex; j < preLeaf.numberOfKey; j++) {
       this.keys[postIndex + j - preIndex] = preLeaf.keys[j];
       this.items[postIndex + j - preIndex] = preLeaf.items[j];
+      preLeaf.items[j] = null;
     }
     if (preLeaf.numberOfKey - preIndex > 0) {
       this.numberOfKey += preLeaf.numberOfKey - preIndex;
@@ -94,6 +114,7 @@ class Leaf<T, U> extends Node<T, U> {
       this.items[j - 1] = this.items[j];
     }
     this.numberOfKey--;
+    this.items[this.numberOfKey] = null;
   }
 
   rightShift(i = 0) {
