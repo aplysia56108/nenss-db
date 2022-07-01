@@ -122,10 +122,7 @@ describe.skip('E2E Tests', () => {
 
     const orangePriceCallbackCalls = orangePriceCallback.mock.calls;
     expect(orangePriceCallbackCalls.length).toBe(1);
-    expect(orangePriceCallbackCalls[0][0].val()).toEqual({
-      ...orangeData,
-      price: 4,
-    });
+    expect(orangePriceCallbackCalls[0][0].val()).toEqual(4);
   });
 
   test('Set and get array test', async () => {
