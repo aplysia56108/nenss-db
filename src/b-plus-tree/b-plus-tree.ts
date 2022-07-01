@@ -27,7 +27,7 @@ class BPlusTree<T, U> implements IBPlusTree<T, U> {
 
   private locate(
     p: Inner<T, U> | Leaf<T, U>,
-    key: T
+    key: T,
   ): [boolean, Leaf<T, U>, number] {
     const i = p.lowerBound(key);
     if (p instanceof Leaf) {
@@ -41,7 +41,7 @@ class BPlusTree<T, U> implements IBPlusTree<T, U> {
 
   private locateByIndex(
     p: Inner<T, U> | Leaf<T, U>,
-    index: number
+    index: number,
   ): Iterator<T, U> {
     if (p instanceof Leaf) {
       return new Iterator<T, U>(p, index);
@@ -142,10 +142,10 @@ class BPlusTree<T, U> implements IBPlusTree<T, U> {
 
   // for debag
   private static print(
-    p: (Inner<unknown, unknown> | Leaf<unknown, unknown>)[]
+    p: (Inner<unknown, unknown> | Leaf<unknown, unknown>)[],
   ): void {
     const out: (Inner<unknown, unknown> | Leaf<unknown, unknown>)[] = new Array(
-      0
+      0,
     );
     let output = '';
     for (let i = 0; i < p.length; i++) {
