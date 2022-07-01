@@ -44,7 +44,7 @@ class Inner<T, U> extends Node<T, U> {
   balanceWhenInserting(
     i: number,
     key: T,
-    right: Inner<T, U> | Leaf<T, U>
+    right: Inner<T, U> | Leaf<T, U>,
   ): void {
     if (this.numberOfKey === this.order - 1) {
       const newRight = new Inner<T, U>(this.order);
@@ -204,7 +204,7 @@ class Inner<T, U> extends Node<T, U> {
   halfImmigrate(
     preInner: Inner<T, U>,
     preIndex: number,
-    postIndex: number
+    postIndex: number,
   ): void {
     for (let j = preIndex; j < preInner.numberOfKey; j++) {
       this.keys[postIndex + j - preIndex] = preInner.keys[j];
@@ -219,7 +219,7 @@ class Inner<T, U> extends Node<T, U> {
   fullImmigrate(
     preInner: Inner<T, U>,
     preIndex: number,
-    postIndex: number
+    postIndex: number,
   ): void {
     this.unite(preInner.release(preIndex), postIndex);
     this.halfImmigrate(preInner, preIndex, postIndex);

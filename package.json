@@ -1,7 +1,6 @@
 {
   "name": "tsdb-draft",
   "version": "0.0.1",
-  "target": "node",
   "main": "src/index.ts",
   "engines": {
     "node": "16.x"

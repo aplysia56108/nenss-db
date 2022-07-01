@@ -1,7 +1,7 @@
 import { conversionMap, alphabet } from './map';
 
 class UniqueKey {
-  private static RANDOM_PART_LENGTH = 15;
+  private static randomPartLength = 15;
 
   private static conversionMap = conversionMap;
 
@@ -21,7 +21,7 @@ class UniqueKey {
     const alphabetLength = this.alphabet.length;
     for (let i = 0; i < length; i++) {
       const randomLetter = this.alphabet.charAt(
-        this.getRandomNumber(alphabetLength)
+        this.getRandomNumber(alphabetLength),
       );
       resultArray.push(randomLetter);
     }
@@ -38,7 +38,7 @@ class UniqueKey {
 
   public static generate(): string {
     const timeStampPart = this.convertNumberToString(this.getTimeStamp());
-    const randomPart = this.generateRandomString(this.RANDOM_PART_LENGTH);
+    const randomPart = this.generateRandomString(this.randomPartLength);
     const uniqueKey = `${timeStampPart}${randomPart}`;
     return uniqueKey;
   }
