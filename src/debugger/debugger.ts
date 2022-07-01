@@ -1,5 +1,5 @@
-import inner from '../inner/index';
-import Leaf from '../leaf/index';
+import inner from '../inner';
+import Leaf from '../leaf';
 
 class Debugger<T, U> {
   private node;

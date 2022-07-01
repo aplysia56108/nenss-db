@@ -1,5 +1,5 @@
-import Leaf from '../leaf/index';
-import Inner from '../inner/index';
+import Leaf from '../leaf';
+import Inner from '../inner';
 import IIterator from './i-iterator';
 
 class Iterator<T, U> implements IIterator<T, U> {

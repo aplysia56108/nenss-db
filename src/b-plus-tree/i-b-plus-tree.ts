@@ -1,4 +1,4 @@
-import Iterator from '../iterator/iterator';
+import Iterator from '../iterator';
 
 interface IBPlusTree<T, U> {
   // return the Iterator object which points to the smallest key which is equal to or greater than the argument.
