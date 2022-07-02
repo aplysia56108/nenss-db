@@ -1,3 +1,3 @@
-import Snapshot from './snapshot';
+import ISnapshot from './i-snapshot';
 
-export default Snapshot;
+export { ISnapshot };
