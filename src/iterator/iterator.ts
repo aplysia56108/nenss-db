@@ -1,5 +1,5 @@
-import Leaf from 'src/leaf';
-import Inner from 'src/inner';
+import Leaf from '../leaf';
+import Inner from '../inner';
 
 class Iterator<T, U> {
   private leaf: Leaf<T, U> | null;

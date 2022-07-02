@@ -18,7 +18,8 @@ interface IIterator<T, U> {
    */
   getItem(): U;
   /**
-   *  Return the corresponding index.
+   *  Overwrite the corresponding item by the given one.
+   * @param item given item
    */
   set(item: U): void;
   /**
