@@ -1,4 +1,4 @@
-import Inner from '../inner/index';
+import Inner from '../inner';
 
 class Node<T, U> {
   keys: T[];
@@ -35,13 +35,17 @@ class Node<T, U> {
 
   partSizeIncrement() {
     this.partSize++;
-    if (this.parent === null) return;
+    if (this.parent === null) {
+      return;
+    }
     this.parent.partSizeIncrement();
   }
 
   partSizeDecrement() {
     this.partSize--;
-    if (this.parent === null) return;
+    if (this.parent === null) {
+      return;
+    }
     this.parent.partSizeDecrement();
   }
 }

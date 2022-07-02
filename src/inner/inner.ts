@@ -1,5 +1,5 @@
-import Node from '../node/index';
-import Leaf from '../leaf/index';
+import Node from '../node';
+import Leaf from '../leaf';
 
 class Inner<T, U> extends Node<T, U> {
   children: (Inner<T, U> | Leaf<T, U> | null)[];
@@ -14,15 +14,17 @@ class Inner<T, U> extends Node<T, U> {
     this.parent = null;
     for (let j = 0; j <= this.numberOfKey; j++) {
       const child = this.getChild(j);
-      if (child instanceof Leaf) return;
-      child.clear();
+      if (!(child instanceof Leaf)) {
+        child.clear();
+      }
     }
   }
 
   getChild(i: number): Inner<T, U> | Leaf<T, U> {
     const child = this.children[i];
-    if (child !== null) return child;
-    else {
+    if (child !== null) {
+      return child;
+    } else {
       throw Error('null child referred.');
     }
   }
@@ -108,11 +110,15 @@ class Inner<T, U> extends Node<T, U> {
       left = this.getChild(i - 1);
       right = this.getChild(i);
     }
-    if (left instanceof Leaf || right instanceof Leaf) return;
+    if (left instanceof Leaf || right instanceof Leaf) {
+      return;
+    }
     if (left.numberOfKey + right.numberOfKey === this.order - 2) {
       this.uniteLeftRight(left.position);
       this.partSize--;
-      if (parent === null) return;
+      if (parent === null) {
+        return;
+      }
       parent.balanceWhenErasing(this.position);
       return;
     }
@@ -149,11 +155,15 @@ class Inner<T, U> extends Node<T, U> {
       left = this.getChild(i - 1);
       right = this.getChild(i);
     }
-    if (left instanceof Inner || right instanceof Inner) return;
+    if (left instanceof Inner || right instanceof Inner) {
+      return;
+    }
     if (left.numberOfKey + right.numberOfKey === this.order - 2) {
       this.leafUniteLeftRight(left.position);
       this.partSize--;
-      if (parent === null) return;
+      if (parent === null) {
+        return;
+      }
       parent.balanceWhenErasing(this.position);
       return;
     }
@@ -182,7 +192,9 @@ class Inner<T, U> extends Node<T, U> {
   uniteLeftRight(i: number): void {
     const left = this.getChild(i);
     const right = this.getChild(i + 1);
-    if (left instanceof Leaf || right instanceof Leaf) return;
+    if (left instanceof Leaf || right instanceof Leaf) {
+      return;
+    }
     left.keys[left.numberOfKey] = this.keys[i];
     left.numberOfKey++;
     left.allImmigrate(right);
@@ -193,7 +205,9 @@ class Inner<T, U> extends Node<T, U> {
   leafUniteLeftRight(i: number): void {
     const left = this.getChild(i);
     const right = this.getChild(i + 1);
-    if (left instanceof Inner || right instanceof Inner) return;
+    if (left instanceof Inner || right instanceof Inner) {
+      return;
+    }
     left.next = right.next;
     if (left.next !== null) left.next.prev = left;
     left.allImmigrate(right);
