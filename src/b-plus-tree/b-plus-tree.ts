@@ -1,7 +1,6 @@
 import Inner from '../inner';
 import Leaf from '../leaf';
 import Iterator from '../iterator';
-import Debugger from '../debugger';
 import IBPlusTree from './i-b-plus-tree';
 
 class BPlusTree<T, U> implements IBPlusTree<T, U> {
@@ -138,30 +137,6 @@ class BPlusTree<T, U> implements IBPlusTree<T, U> {
 
   public clear(): void {
     this.root = new Leaf(this.order);
-  }
-
-  private static print(
-    p: (Inner<unknown, unknown> | Leaf<unknown, unknown>)[],
-  ): void {
-    const out: (Inner<unknown, unknown> | Leaf<unknown, unknown>)[] = new Array(
-      0,
-    );
-    let output = '';
-    for (let i = 0; i < p.length; i++) {
-      output += new Debugger(p[i]).show();
-      for (let j = 0; j <= p[i].numberOfKey; j++) {
-        const m = p[i];
-        if (m instanceof Inner) out.push(m.getChild(j));
-      }
-    }
-    process.stdout.write(output);
-    if (out.length > 0) {
-      this.print(out);
-    }
-  }
-
-  public show(): void {
-    BPlusTree.print([this.root]);
   }
 }
 
