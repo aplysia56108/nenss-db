@@ -1,30 +1,69 @@
-import Iterator from '../iterator';
+import Iterator from 'src/iterator';
 
 interface IBPlusTree<T, U> {
-  // return the Iterator object which points to the smallest key which is equal to or greater than the argument.
+  /**
+   * Return the Iterator object which points to the smallest key which is equal to or greater than the given key.
+   * @param key compared key
+   */
   lowerBound(key: T): Iterator<T, U>;
-  // return the Iterator object which points to the smallest key which is greater than the argument.
+  /**
+   * Return the Iterator object which points to the smallest key which is greater than the given key.
+   * @param key compared key
+   */
   upperBound(key: T): Iterator<T, U>;
-  // return if the argument is already contained as a key in this tree.
+  /**
+   * Return if the given key is already contained as a key in this tree.
+   * @param key compared key
+   */
   count(key: T): boolean;
-  // return the item corresponding to the argument key. if the argument is not contained in the tree, return null.
+  /**
+   * Return the iterator corresponding to the given key. if the key is not contained in the tree, return null.
+   * @param key compared key
+   */
   search(key: T): Iterator<T, U> | null;
-  // return the Iterator object which points to "the argument times" smallest key (zero indexed).
+  /**
+   * Return the Iterator object which points to n-th smallest key (zero indexed).
+   * @param i index of key when all the contained key was sorted.
+   */
   get(i: number): Iterator<T, U>;
-  // return the Iterator object which points to the smallest key. same as get(0).
+  /**
+   * Return the Iterator object which points to the smallest key. same as get(0).
+   */
   begin(): Iterator<T, U>;
-  // return the Iterator object next to the one which points to the greatest key. same as get(.size()). note that it is null iterator.
+  /**
+   * Return the Iterator object next to the one which points to the greatest key. same as get(.size()). note that it is invalid iterator.
+   */
   end(): Iterator<T, U>;
-  // if the argument key is already contained in the tree, update the corresponding item to the argument item and return false. else insert the pair of the argument key and item and return true.
+  /**
+   * If the key is already contained in the tree, overwrite the corresponding item to the given item and return false and its iterator. else insert the pair of the argument key and item and return true and iterator.
+   * @param key referenced key
+   * @param item inserted item
+   */
   insert(key: T, item: U): [boolean, Iterator<T, U>];
-  // if the argument key is not contained in the tree, return false. else erase the pair of key and item corresponding to the argument kry and return true.
+  /**
+   * If the key is already contained in the tree, return false and its iterator. else insert the pair of the argument key and item and return trueand return true and iterator.
+   * @param key referenced key
+   * @param item inserted item
+   */
+  push(key: T, item: U): [boolean, Iterator<T, U>];
+  /**
+   * If the key is already contained in the tree, return true and erase key and item in the tree. else return false.
+   * @param key compared key
+   */
   erase(key: T): boolean;
-  // return the number of pairs of key and item which are contained in the tree.
+  /**
+   * Erase key and item which given iterater corresponding to in the tree.
+   * @param iterator iterator corresponding to the erasing key and item
+   */
+  delete(iterator: Iterator<T, U>): void;
+  /**
+   * Return the size of the tree.
+   */
   size(): number;
-  // initialize the tree.
+  /**
+   * Clear out the tree.
+   */
   clear(): void;
-  // for debug. output the structure of all the keys contained.
-  show(): void;
 }
 
 export default IBPlusTree;
