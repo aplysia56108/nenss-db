@@ -1,4 +1,4 @@
-import Leaf from 'src/leaf';
+import Leaf from '../leaf';
 
 interface IIterator<T, U> {
   /**
