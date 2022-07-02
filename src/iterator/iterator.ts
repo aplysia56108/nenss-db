@@ -1,8 +1,7 @@
-import Leaf from '../leaf';
-import Inner from '../inner';
-import IIterator from './i-iterator';
+import Leaf from 'src/leaf';
+import Inner from 'src/inner';
 
-class Iterator<T, U> implements IIterator<T, U> {
+class Iterator<T, U> {
   private leaf: Leaf<T, U> | null;
   private position: number;
   constructor(leaf: Leaf<T, U>, position: number) {
@@ -12,29 +11,30 @@ class Iterator<T, U> implements IIterator<T, U> {
   }
 
   private adjust(): void {
-    if (this.leaf === null) return;
-    if (this.leaf.numberOfKey <= this.position) {
-      while (this.leaf.next !== null) {
-        this.position -= this.leaf.numberOfKey;
-        this.leaf = this.leaf.next;
-        if (this.position < this.leaf.numberOfKey) {
-          break;
+    if (this.leaf !== null) {
+      if (this.leaf.numberOfKey <= this.position) {
+        while (this.leaf.next !== null) {
+          this.position -= this.leaf.numberOfKey;
+          this.leaf = this.leaf.next;
+          if (this.position < this.leaf.numberOfKey) {
+            break;
+          }
         }
       }
-    }
-    if (this.position < 0) {
-      while (this.leaf.prev !== null) {
-        this.leaf = this.leaf.prev;
-        this.position += this.leaf.numberOfKey;
-        if (this.position >= 0) {
-          break;
+      if (this.position < 0) {
+        while (this.leaf.prev !== null) {
+          this.leaf = this.leaf.prev;
+          this.position += this.leaf.numberOfKey;
+          if (this.position >= 0) {
+            break;
+          }
         }
       }
     }
   }
 
   prev(): boolean {
-    if (this.leaf === null) return false;
+    if (this.leaf === null) {return false;}
     if (this.position === 0 && this.leaf.prev !== null) {
       this.leaf = this.leaf.prev;
       this.position = this.leaf.numberOfKey - 1;
@@ -45,7 +45,7 @@ class Iterator<T, U> implements IIterator<T, U> {
   }
 
   next(): boolean {
-    if (this.leaf === null) return false;
+    if (this.leaf === null) {return false;}
     if (
       this.position === this.leaf.numberOfKey - 1 &&
       this.leaf.next !== null
@@ -72,18 +72,7 @@ class Iterator<T, U> implements IIterator<T, U> {
     return this.leaf.getItem(this.position);
   }
 
-  get(): [T, U] {
-    if (
-      this.leaf === null ||
-      this.position < 0 ||
-      this.position >= this.leaf.numberOfKey
-    ) {
-      throw Error('invalid iterator.');
-    }
-    return [this.leaf.keys[this.position], this.leaf.getItem(this.position)];
-  }
-
-  set(item: U) {
+  set(item: U): void {
     if (
       this.leaf === null ||
       this.position < 0 ||
@@ -94,11 +83,11 @@ class Iterator<T, U> implements IIterator<T, U> {
     this.leaf.items[this.position] = item;
   }
 
-  getLeaf() {
+  getLeaf(): Leaf<T, U> {
     return this.leaf;
   }
 
-  getPosition() {
+  getPosition(): number {
     return this.position;
   }
 
