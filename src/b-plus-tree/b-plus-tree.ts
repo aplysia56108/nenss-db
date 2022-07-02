@@ -1,6 +1,6 @@
-import Inner from 'src/inner';
-import Leaf from 'src/leaf';
-import Iterator from 'src/iterator';
+import Inner from '../inner';
+import Leaf from '../leaf';
+import Iterator from '../iterator';
 import IBPlusTree from './i-b-plus-tree';
 
 class BPlusTree<T, U> implements IBPlusTree<T, U> {

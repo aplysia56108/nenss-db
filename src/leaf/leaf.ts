@@ -1,5 +1,5 @@
-import Node from 'src/node';
-import Inner from 'src/inner';
+import Node from '../node';
+import Inner from '../inner';
 
 class Leaf<T, U> extends Node<T, U> {
   keys: T[];

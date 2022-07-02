@@ -1,4 +1,4 @@
-import BPlusTree from '../../src/b-plus-tree/index';
+import BPlusTree from '../../src/b-plus-tree';
 
 test('insert-test', () => {
   const target = new BPlusTree<number, number>(5);

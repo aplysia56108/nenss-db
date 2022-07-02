@@ -1,5 +1,5 @@
-import Node from 'src/node';
-import Leaf from 'src/leaf';
+import Node from '../node';
+import Leaf from '../leaf';
 
 class Inner<T, U> extends Node<T, U> {
   children: (Inner<T, U> | Leaf<T, U> | null)[];

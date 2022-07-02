@@ -1,4 +1,4 @@
-import Inner from 'src/inner';
+import Inner from '../inner';
 
 class Node<T, U> {
   keys: T[];
