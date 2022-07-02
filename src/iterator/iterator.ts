@@ -34,7 +34,9 @@ class Iterator<T, U> {
   }
 
   prev(): boolean {
-    if (this.leaf === null) {return false;}
+    if (this.leaf === null) {
+      return false;
+    }
     if (this.position === 0 && this.leaf.prev !== null) {
       this.leaf = this.leaf.prev;
       this.position = this.leaf.numberOfKey - 1;
@@ -45,7 +47,9 @@ class Iterator<T, U> {
   }
 
   next(): boolean {
-    if (this.leaf === null) {return false;}
+    if (this.leaf === null) {
+      return false;
+    }
     if (
       this.position === this.leaf.numberOfKey - 1 &&
       this.leaf.next !== null

@@ -1,5 +1,5 @@
-import Node from '../node';
-import Inner from '../inner';
+import Node from 'src/node';
+import Inner from 'src/inner';
 
 class Leaf<T, U> extends Node<T, U> {
   keys: T[];
@@ -57,7 +57,9 @@ class Leaf<T, U> extends Node<T, U> {
       }
       newRight.next = this.next;
       newRight.prev = this;
-      if (this.next !== null) this.next.prev = newRight;
+      if (this.next !== null) {
+        this.next.prev = newRight;
+      }
       this.next = newRight;
       if (this.parent === null) {
         const root = new Inner<T, U>(this.order);
@@ -85,7 +87,9 @@ class Leaf<T, U> extends Node<T, U> {
       return;
     }
     this.partSize--;
-    if (parent === null) return;
+    if (parent === null) {
+      return;
+    }
     parent.leafBalanceWhenErasing(this.position);
     return;
   }

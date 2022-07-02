@@ -17,12 +17,12 @@ class BPlusTree<T, U> implements IBPlusTree<T, U> {
       this.resetRoot();
     }
     if (this.root.numberOfKey === 0) {
-      if (!(this.root instanceof Leaf)){
-      this.root = this.root.getChild(0);
-      this.root.parent = null;
-      this.resetRoot();
+      if (!(this.root instanceof Leaf)) {
+        this.root = this.root.getChild(0);
+        this.root.parent = null;
+        this.resetRoot();
+      }
     }
-  }
   }
 
   private locate(
@@ -66,7 +66,9 @@ class BPlusTree<T, U> implements IBPlusTree<T, U> {
   public upperBound(key: T): Iterator<T, U> {
     const [isPresent, leaf, i] = this.locate(this.root, key);
     const iterator = new Iterator<T, U>(leaf, i);
-    if (isPresent) {iterator.next();}
+    if (isPresent) {
+      iterator.next();
+    }
     return iterator;
   }
 
@@ -77,7 +79,9 @@ class BPlusTree<T, U> implements IBPlusTree<T, U> {
   public search(key: T): Iterator<T, U> | null {
     const [isPresent, leaf, i] = this.locate(this.root, key);
     const iterator = new Iterator<T, U>(leaf, i);
-    if (isPresent) {return iterator;}
+    if (isPresent) {
+      return iterator;
+    }
     return null;
   }
 
