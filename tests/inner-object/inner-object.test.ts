@@ -2,8 +2,9 @@ import BPlusTree from '../../src/b-plus-tree';
 import InnerObject from '../../src/inner-object';
 import Iterator from '../../src/iterator';
 import { Snapshot } from '../../src/snapshot';
+import { Data } from '../../src/common/type-defs/type-defs';
+import DataConverter from '../../src/common/data-converter';
 
-type Data = number | string | boolean | { [key: string]: Data | null };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const callback = <T = any>(_snapshot: Snapshot<T>): void => {
   return;
@@ -179,8 +180,27 @@ describe('innerObject test', () => {
     });
   });
 
-  describe.skip('set and push test', () => {
-    return;
+  describe('set and push test', () => {
+    const innerObject = new InnerObject({}, '', 5);
+    const object: Data = {
+      ['boolean']: true,
+      ['string']: 'test',
+      ['number']: 0,
+      ['objest']: {
+        ['key']: 'item',
+        ['null']: null,
+      },
+    };
+    innerObject.set(object);
+    const output: Data = {
+      ['boolean']: true,
+      ['string']: 'test',
+      ['number']: 0,
+      ['objest']: {
+        ['key']: 'item',
+      },
+    };
+    expect(DataConverter.toData(innerObject)).toEqual(output);
   });
 
   describe('delete test', () => {
@@ -311,7 +331,7 @@ describe('innerObject test', () => {
       const subscriptions = {
         ['/']: [subscription, subscription, subscription],
         ['/apple']: [subscription, subscription],
-        ['/apple/orenge']: [subscription],
+        ['/apple/orange']: [subscription],
       };
       const innerObject1 = new InnerObject(subscriptions, '', 5);
       innerObject1.exeSubscription();

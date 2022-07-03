@@ -2,9 +2,8 @@ import BPlusTree from '../../../src/b-plus-tree';
 import InnerObject from '../../../src/inner-object';
 import DataConverter from '../../../src/common/data-converter';
 import Iterator from '../../../src/iterator';
-import { UnexpectedTypeOfKeyToInsertError } from '../../../src/common/error';
-
-type Data = number | string | boolean | { [key: string]: Data | null };
+import { UnexpectedDataTypeToInsertError } from '../../../src/common/error';
+import { Data } from '../../../src/common/type-defs/type-defs';
 
 describe('toInerData test', () => {
   test('null test', () => {
@@ -15,7 +14,7 @@ describe('toInerData test', () => {
   test('undefined test', () => {
     expect(() => DataConverter.toInnerData(undefined)).toThrow();
     expect(() => DataConverter.toInnerData(undefined)).toThrow(
-      UnexpectedTypeOfKeyToInsertError,
+      new UnexpectedDataTypeToInsertError(typeof undefined),
     );
   });
 
@@ -39,11 +38,6 @@ describe('toInerData test', () => {
     expect(data).toBe(5);
   });
 
-  test('number test', () => {
-    const data = DataConverter.toInnerData(5);
-    expect(data).toBe(5);
-  });
-
   test('list test', () => {
     const input = [3, true, 'test'];
     const data = DataConverter.toInnerData(input);
@@ -55,12 +49,18 @@ describe('toInerData test', () => {
   });
 
   test('object test', () => {
-    const input = { number: 5, boolean: false, string: 'test' };
+    const input = {
+      number: 1,
+      boolean: false,
+      string: 'test',
+      object: { key: 'item' },
+    };
     const data = DataConverter.toInnerData(input);
     const output: Data = {};
-    output['number'] = 5;
+    output['number'] = 1;
     output['boolean'] = false;
     output['string'] = 'test';
+    output['object'] = { ['key']: 'item' };
     expect(data).toEqual(output);
   });
 });

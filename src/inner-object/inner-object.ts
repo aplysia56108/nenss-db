@@ -1,10 +1,8 @@
 import BPlusTree from '../b-plus-tree';
 import { Snapshot } from '../snapshot';
+import { Data, Func } from '../common/type-defs/type-defs';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-type Func<T = any> = (data: Snapshot<T>) => void;
-type Data = number | string | boolean | { [key: string]: Data | null };
 
 interface ISubscriptions {
   [ref: string]: Func[];
