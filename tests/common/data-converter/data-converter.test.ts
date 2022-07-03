@@ -2,6 +2,7 @@ import BPlusTree from '../../../src/b-plus-tree';
 import InnerObject from '../../../src/inner-object';
 import DataConverter from '../../../src/common/data-converter';
 import Iterator from '../../../src/iterator';
+import { UnexpectedTypeOfKeyToInsertError } from '../../../src/common/error';
 
 type Data = number | string | boolean | { [key: string]: Data | null };
 
@@ -13,9 +14,8 @@ describe('toInerData test', () => {
 
   test('undefined test', () => {
     expect(() => DataConverter.toInnerData(undefined)).toThrow();
-    expect(() => DataConverter.toInnerData(undefined)).toThrow(Error);
     expect(() => DataConverter.toInnerData(undefined)).toThrow(
-      'unexpected type of key to insert.',
+      UnexpectedTypeOfKeyToInsertError,
     );
   });
 

@@ -1,5 +1,6 @@
 import BPlusTree from '../../b-plus-tree';
 import InnerObject from '../../inner-object';
+import { UnexpectedTypeOfKeyToInsertError } from '../error';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -17,7 +18,7 @@ class DataConverter {
       typeof obj === 'symbol' ||
       typeof obj === 'bigint'
     ) {
-      throw Error('unexpected type of key to insert.');
+      throw new UnexpectedTypeOfKeyToInsertError();
     } else if (typeof obj === 'string') {
       return obj as string;
     } else if (typeof obj === 'number') {
