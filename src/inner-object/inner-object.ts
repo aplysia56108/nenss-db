@@ -1,6 +1,6 @@
 import BPlusTree from '../b-plus-tree';
 import { Snapshot } from '../snapshot';
-import { Data, ISubscriptions } from '../common/type-defs';
+import { Data, ISubscriptions } from '../common/type-interface-defs';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 

@@ -1,10 +1,9 @@
 import BPlusTree from '../../b-plus-tree';
 import InnerObject from '../../inner-object';
 import { UnexpectedDataTypeToInsertError } from '../error';
+import { Data } from '../type-interface-defs';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-type Data = number | string | boolean | { [key: string]: Data | null };
 
 class DataConverter {
   public static toInnerData<T = any>(object: T): Data | null {
