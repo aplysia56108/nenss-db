@@ -1,7 +1,7 @@
 import BPlusTree from '../../b-plus-tree';
 import InnerObject from '../../inner-object';
 import { UnexpectedDataTypeToInsertError } from '../error';
-import { Data } from '../type-interface-defs';
+import { Data } from '../types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
