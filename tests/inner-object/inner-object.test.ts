@@ -2,7 +2,7 @@ import BPlusTree from '../../src/b-plus-tree';
 import InnerObject from '../../src/inner-object';
 import Iterator from '../../src/iterator';
 import { Snapshot } from '../../src/snapshot';
-import { Data } from '../../src/common/type-defs/type-defs';
+import { Data } from '../../src/common/type-defs';
 import DataConverter from '../../src/common/data-converter';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

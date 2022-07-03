@@ -1,12 +1,8 @@
 import BPlusTree from '../b-plus-tree';
 import { Snapshot } from '../snapshot';
-import { Data, Func } from '../common/type-defs/type-defs';
+import { Data, ISubscriptions } from '../common/type-defs';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-interface ISubscriptions {
-  [ref: string]: Func[];
-}
 
 class InnerObject {
   private object: BPlusTree<string, InnerObject> | number | string | boolean;

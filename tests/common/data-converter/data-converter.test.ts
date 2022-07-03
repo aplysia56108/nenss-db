@@ -3,7 +3,7 @@ import InnerObject from '../../../src/inner-object';
 import DataConverter from '../../../src/common/data-converter';
 import Iterator from '../../../src/iterator';
 import { UnexpectedDataTypeToInsertError } from '../../../src/common/error';
-import { Data } from '../../../src/common/type-defs/type-defs';
+import { Data } from '../../../src/common/type-defs';
 
 describe('toInerData test', () => {
   test('null test', () => {

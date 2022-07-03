@@ -1,7 +1,7 @@
 import DataConverter from '../common/data-converter';
 import InnerObject from '../inner-object';
 import ISnapshot from './i-snapshot';
-import { Data } from '../common/type-defs/type-defs';
+import { Data } from '../common/type-defs';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
