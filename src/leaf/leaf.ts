@@ -1,5 +1,6 @@
 import Node from '../node';
 import Inner from '../inner';
+import UnexpectedNullItemError from '../common/error/unexpected-null-item-error';
 
 class Leaf<T, U> extends Node<T, U> {
   keys: T[];
@@ -17,20 +18,13 @@ class Leaf<T, U> extends Node<T, U> {
   }
 
   getKey(i: number): T {
-    if (i < 0 || i >= this.numberOfKey) {
-      throw Error('invalid iterator.');
-    }
-    const key = this.keys[i];
-    return key;
+    return this.keys[i];
   }
 
   getItem(i: number): U {
-    if (i < 0 || i >= this.numberOfKey) {
-      throw Error('invalid iterator.');
-    }
     const item = this.items[i];
     if (item === null) {
-      throw Error('unexpected null item.');
+      throw new UnexpectedNullItemError();
     }
     return item;
   }

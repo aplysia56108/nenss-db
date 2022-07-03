@@ -132,6 +132,7 @@ class BPlusTree<T, U> implements IBPlusTree<T, U> {
     const leaf = iterator.getLeaf();
     if (leaf !== null) {
       leaf.erase(iterator.getPosition());
+      iterator.clear();
       this.resetRoot();
     }
   }
@@ -141,6 +142,9 @@ class BPlusTree<T, U> implements IBPlusTree<T, U> {
   }
 
   public clear(): void {
+    if (this.root instanceof Inner) {
+      this.root.clear();
+    }
     this.root = new Leaf(this.order);
   }
 }

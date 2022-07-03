@@ -1,5 +1,6 @@
 import Leaf from '../leaf';
 import Inner from '../inner';
+import InvalidIteratorError from '../common/error/invalid-iterator-error';
 
 class Iterator<T, U> {
   private leaf: Leaf<T, U> | null;
@@ -63,15 +64,15 @@ class Iterator<T, U> {
   }
 
   getKey(): T {
-    if (this.leaf === null) {
-      throw Error('invalid iterator.');
+    if (!this.isValid()) {
+      throw new InvalidIteratorError();
     }
     return this.leaf.getKey(this.position);
   }
 
   getItem(): U {
-    if (this.leaf === null) {
-      throw Error('invalid iterator.');
+    if (!this.isValid()) {
+      throw new InvalidIteratorError();
     }
     return this.leaf.getItem(this.position);
   }
@@ -82,12 +83,12 @@ class Iterator<T, U> {
       this.position < 0 ||
       this.position >= this.leaf.numberOfKey
     ) {
-      throw Error('invalid iterator.');
+      throw new InvalidIteratorError();
     }
     this.leaf.items[this.position] = item;
   }
 
-  getLeaf(): Leaf<T, U> {
+  getLeaf(): Leaf<T, U> | null {
     return this.leaf;
   }
 
@@ -96,6 +97,7 @@ class Iterator<T, U> {
   }
 
   isValid(): boolean {
+    this.adjust();
     if (
       this.leaf === null ||
       this.position < 0 ||
@@ -107,7 +109,9 @@ class Iterator<T, U> {
   }
 
   toIndex(): number {
-    if (this.leaf === null) return -1;
+    if (this.leaf === null) {
+      return -1;
+    }
     let index = 0;
     let p: Inner<T, U> | Leaf<T, U>;
     p = this.leaf;
