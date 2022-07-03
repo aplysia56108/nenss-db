@@ -4,8 +4,8 @@ import { Snapshot } from '../../snapshot';
 
 type Data = number | string | boolean | { [key: string]: Data | null };
 type Func<T = any> = (data: Snapshot<T>) => void;
-interface ISubscriptions {
+type Subscriptions = {
   [ref: string]: Func[];
-}
+};
 
-export { Data, Func, ISubscriptions };
+export { Data, Func, Subscriptions };

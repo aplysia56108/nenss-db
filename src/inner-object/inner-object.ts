@@ -1,6 +1,6 @@
 import BPlusTree from '../b-plus-tree';
 import { Snapshot } from '../snapshot';
-import { Data, ISubscriptions } from '../common/type-interface-defs';
+import { Data, Subscriptions } from '../common/types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -10,9 +10,9 @@ class InnerObject {
   private ref: string;
   private name: string;
   private order;
-  private subscriptions: ISubscriptions;
+  private subscriptions: Subscriptions;
   constructor(
-    subscriptions: ISubscriptions,
+    subscriptions: Subscriptions,
     name: string,
     order: number,
     parent: InnerObject | null = null,
