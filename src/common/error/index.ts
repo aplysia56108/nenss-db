@@ -1,4 +1,4 @@
 import NullChildRefferedError from './null-child-reffered-error';
-import UnexpectedTypeOfKeyToInsertError from './unexpected-type-of-key-to-insert-error';
+import UnexpectedDataTypeToInsertError from './unexpected-data-type-to-insert-error';
 
-export { NullChildRefferedError, UnexpectedTypeOfKeyToInsertError };
+export { NullChildRefferedError, UnexpectedDataTypeToInsertError };
