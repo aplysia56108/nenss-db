@@ -33,11 +33,6 @@ describe('toInerData test', () => {
     expect(data).toBe(5);
   });
 
-  test('number test', () => {
-    const data = DataConverter.toInnerData(5);
-    expect(data).toBe(5);
-  });
-
   test('list test', () => {
     const input = [3, true, 'test'];
     const data = DataConverter.toInnerData(input);
