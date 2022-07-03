@@ -1,11 +1,11 @@
 import BPlusTree from '../b-plus-tree';
 import { Snapshot } from '../snapshot';
-import { Data, Subscriptions } from '../common/types';
+import { Data, InnerObjectData, Subscriptions } from '../common/types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 class InnerObject {
-  private object: BPlusTree<string, InnerObject> | number | string | boolean;
+  private object: InnerObjectData;
   private parent: InnerObject | null;
   private ref: string;
   private name: string;
@@ -36,9 +36,7 @@ class InnerObject {
   public getObject() {
     return this.object;
   }
-  public setObject(
-    object: BPlusTree<string, InnerObject> | number | string | boolean,
-  ) {
+  public setObject(object: InnerObjectData) {
     this.object = object;
   }
 
