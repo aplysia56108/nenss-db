@@ -1,4 +1,12 @@
+import Leaf from '../../src/leaf';
 import BPlusTree from '../../src/b-plus-tree';
+import {
+  InvalidIteratorError,
+  NullChildReferredError,
+  UnexpectedNullItemError,
+} from '../../src/common/error';
+import Inner from '../../src/inner';
+import Iterator from '../../src/iterator';
 
 test('insert-test', () => {
   const target = new BPlusTree<number, number>(5);
@@ -88,4 +96,104 @@ test('erase-test', () => {
     expectedOutput.push([i, i ** 2]);
   }
   expect(output.toString()).toBe(expectedOutput.toString());
+  for (let i = 0; i < insertSample.length - eraseSample.length; i++) {
+    target.erase(i);
+  }
+  expect(target.size()).toBe(0);
+});
+
+test('small test', () => {
+  const target = new BPlusTree<number, number>(5);
+  const insertSample = [0, 1, 2];
+  const eraseSample = [2, 0, 1];
+
+  for (let i = 0; i < insertSample.length; i++) {
+    target.insert(insertSample[i], insertSample[i] ** 2);
+  }
+
+  for (let i = 0; i < insertSample.length; i++) {
+    target.erase(eraseSample[i]);
+  }
+  expect(target.size()).toBe(0);
+});
+
+test('null item error test', () => {
+  const leaf = new Leaf(5);
+  leaf.items[1] = null;
+  expect(() => leaf.getItem(1)).toThrow(UnexpectedNullItemError);
+});
+
+test('null child error test', () => {
+  const inner = new Inner(5);
+  inner.children[1] = null;
+  expect(() => inner.getChild(1)).toThrow(NullChildReferredError);
+});
+
+test('clear test', () => {
+  const target = new BPlusTree<number, number>(5);
+  for (let i = 0; i < 100; i++) {
+    target.insert(i, i);
+  }
+  expect(target.size()).toBe(100);
+  target.clear();
+  expect(target.size()).toBe(0);
+});
+
+test('iterator test', () => {
+  const target = new BPlusTree<number, number>(5);
+  for (let i = 0; i < 50; i++) {
+    target.insert(i, i);
+  }
+  const iterator = target.end();
+  expect(() => iterator.getKey()).toThrow(InvalidIteratorError);
+  expect(() => iterator.getItem()).toThrow(InvalidIteratorError);
+  const iterator2 = new Iterator<number, number>(iterator.getLeaf(), -10);
+  expect(iterator2.toIndex()).toBe(50 - iterator.getPosition() - 10);
+  expect(iterator.isValid()).toBe(false);
+  for (let i = 0; i < 10; i++) {
+    iterator.prev();
+  }
+  expect(iterator.isValid()).toBe(true);
+  expect(iterator.toIndex()).toBe(40);
+  iterator.clear();
+  expect(iterator.isValid()).toBe(false);
+  expect(iterator.prev()).toBe(false);
+  expect(iterator.next()).toBe(false);
+  expect(() => iterator.set(1)).toThrow(InvalidIteratorError);
+  expect(iterator.toIndex()).toBe(-1);
+});
+
+test('push insert lowerBound upperBound', () => {
+  const target = new BPlusTree<number, number>(5);
+  target.insert(1, 1);
+  target.insert(3, 3);
+  expect(target.insert(5, 5)[0]).toBe(true);
+  const iterator1 = target.insert(1, 3);
+  expect(iterator1[0]).toBe(false);
+  expect(iterator1[1].getItem()).toBe(3);
+  const iterator2 = target.push(1, 5);
+  expect(iterator2[0]).toBe(false);
+  expect(iterator2[1].getItem()).toBe(3);
+  const iterator3 = target.push(2, 2);
+  expect(iterator3[0]).toBe(true);
+  expect(iterator3[1].getItem()).toBe(2);
+  const iterator4 = target.lowerBound(3);
+  expect(iterator4.getKey()).toBe(3);
+  expect(iterator4.getItem()).toBe(3);
+  const iterator5 = target.lowerBound(4);
+  expect(iterator5.getKey()).toBe(5);
+  expect(iterator5.getItem()).toBe(5);
+  const iterator6 = target.upperBound(3);
+  expect(iterator6.getKey()).toBe(5);
+  expect(iterator6.getItem()).toBe(5);
+  const iterator7 = target.upperBound(4);
+  expect(iterator7.getKey()).toBe(5);
+  expect(iterator7.getItem()).toBe(5);
+  iterator7.set(10);
+  const iterator8 = target.search(5);
+  expect(iterator8.getItem()).toBe(10);
+  expect(target.count(5)).toBe(true);
+  target.delete(iterator8);
+  expect(target.search(5)).toBe(null);
+  expect(target.count(5)).toBe(false);
 });
