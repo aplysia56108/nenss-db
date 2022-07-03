@@ -1,6 +1,6 @@
 import BPlusTree from '../../b-plus-tree';
 import InnerObject from '../../inner-object';
-import { UnexpectedTypeOfKeyToInsertError } from '../error';
+import { UnexpectedDataTypeToInsertError } from '../error';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -11,37 +11,31 @@ class DataConverter {
     const obj = object as unknown;
     if (obj === null) {
       return null;
-    }
-    if (
-      typeof obj === 'function' ||
-      typeof obj === 'undefined' ||
-      typeof obj === 'symbol' ||
-      typeof obj === 'bigint'
-    ) {
-      throw new UnexpectedTypeOfKeyToInsertError();
     } else if (typeof obj === 'string') {
       return obj as string;
     } else if (typeof obj === 'number') {
       return obj as number;
     } else if (typeof obj === 'boolean') {
       return obj as boolean;
-    }
-    const innerData: Data = {};
-    if (Array.isArray(obj)) {
-      for (let i = 0; i < obj.length; i++) {
-        innerData[i.toString()] = this.toInnerData(obj[i]);
+    } else if (typeof obj === 'object') {
+      const innerData: Data = {};
+      if (Array.isArray(obj)) {
+        for (let i = 0; i < obj.length; i++) {
+          innerData[i.toString()] = this.toInnerData(obj[i]);
+        }
+      } else {
+        const reInterpretationOfObj = obj as unknown as T;
+        const keys = Object.keys(reInterpretationOfObj);
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i] as keyof T;
+          innerData[key.toString()] = this.toInnerData(
+            reInterpretationOfObj[key],
+          );
+        }
       }
-    } else {
-      const reInterpretationOfObj = obj as unknown as T;
-      const keys = Object.keys(reInterpretationOfObj);
-      for (let i = 0; i < keys.length; i++) {
-        const key = keys[i] as keyof T;
-        innerData[key.toString()] = this.toInnerData(
-          reInterpretationOfObj[key],
-        );
-      }
+      return innerData;
     }
-    return innerData;
+    throw new UnexpectedDataTypeToInsertError(typeof obj);
   }
 
   public static toData<T = any>(object: InnerObject): T {
