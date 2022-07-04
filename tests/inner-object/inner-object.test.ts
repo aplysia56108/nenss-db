@@ -186,7 +186,7 @@ describe('innerObject test', () => {
       ['boolean']: true,
       ['string']: 'test',
       ['number']: 0,
-      ['objest']: {
+      ['object']: {
         ['key']: 'item',
         ['null']: null,
       },
@@ -196,7 +196,7 @@ describe('innerObject test', () => {
       ['boolean']: true,
       ['string']: 'test',
       ['number']: 0,
-      ['objest']: {
+      ['object']: {
         ['key']: 'item',
       },
     };
@@ -274,7 +274,7 @@ describe('innerObject test', () => {
       );
       const mockRollBack1 = jest.spyOn(innerObject, 'rollBack');
       const mockRollBack2 = jest.spyOn(subInnerObject, 'rollBack');
-      const mockDetete = jest
+      const mockDelete = jest
         .spyOn(InnerObject.prototype, 'delete')
         .mockImplementation(() => {
           return;
@@ -284,12 +284,12 @@ describe('innerObject test', () => {
       expect(mockExeSubscription1.mock.calls.length).toBe(0);
       expect(mockRollBack2.mock.calls.length).toBe(1);
       expect(mockExeSubscription2.mock.calls.length).toBe(0);
-      expect(mockDetete.mock.calls.length).toBe(1);
+      expect(mockDelete.mock.calls.length).toBe(1);
       mockExeSubscription1.mockRestore();
       mockRollBack1.mockRestore();
       mockExeSubscription2.mockRestore();
       mockRollBack2.mockRestore();
-      mockDetete.mockRestore();
+      mockDelete.mockRestore();
     });
 
     test('data test', () => {
@@ -302,7 +302,7 @@ describe('innerObject test', () => {
       );
       const mockRollBack1 = jest.spyOn(innerObject, 'rollBack');
       const mockRollBack2 = jest.spyOn(subInnerObject, 'rollBack');
-      const mockDetete = jest
+      const mockDelete = jest
         .spyOn(InnerObject.prototype, 'delete')
         .mockImplementation(() => {
           return;
@@ -312,15 +312,15 @@ describe('innerObject test', () => {
         .mockReturnValue(1);
       subInnerObject.rollBack();
       expect(mockRollBack1.mock.calls.length).toBe(1);
-      expect(mockExeSubscription1.mock.calls.length).toBe(0);
+      expect(mockExeSubscription1.mock.calls.length).toBe(1);
       expect(mockRollBack2.mock.calls.length).toBe(1);
-      expect(mockExeSubscription2.mock.calls.length).toBe(1);
-      expect(mockDetete.mock.calls.length).toBe(0);
+      expect(mockExeSubscription2.mock.calls.length).toBe(0);
+      expect(mockDelete.mock.calls.length).toBe(0);
       mockExeSubscription1.mockRestore();
       mockRollBack1.mockRestore();
       mockExeSubscription2.mockRestore();
       mockRollBack2.mockRestore();
-      mockDetete.mockRestore();
+      mockDelete.mockRestore();
       mockSize.mockRestore();
     });
   });
