@@ -9,7 +9,15 @@ type Func<T = any> = (data: Snapshot<T>) => void;
 type InnerObjectTree = BPlusTree<string, InnerObject>;
 type InnerObjectData = InnerObjectTree | number | string | boolean;
 type Subscriptions = {
-  [ref: string]: Func[];
+  [ref: string]: { [id: string]: Func };
 };
+const nullData = null as InnerObjectData;
 
-export { Data, Func, InnerObjectTree, InnerObjectData, Subscriptions };
+export {
+  Data,
+  Func,
+  InnerObjectTree,
+  InnerObjectData,
+  Subscriptions,
+  nullData,
+};

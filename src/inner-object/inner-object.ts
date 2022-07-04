@@ -1,6 +1,11 @@
 import BPlusTree from '../b-plus-tree';
 import { Snapshot } from '../snapshot';
-import { Data, InnerObjectData, Subscriptions } from '../common/types';
+import {
+  Data,
+  InnerObjectData,
+  nullData,
+  Subscriptions,
+} from '../common/types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -84,6 +89,8 @@ class InnerObject {
       while (this.object.size() > 0) {
         this.object.begin().getItem().delete();
       }
+    } else {
+      this.object = nullData;
     }
     if (this.parent !== null) {
       const dir = this.parent.getObject();
@@ -114,8 +121,9 @@ class InnerObject {
     if (callbacks === undefined) {
       return;
     }
-    for (let i = 0; i < callbacks.length; i++) {
-      callbacks[i](new Snapshot<T>(this));
+    const ids = Object.keys(callbacks);
+    for (let i = 0; i < ids.length; i++) {
+      callbacks[ids[i]](new Snapshot<T>(this.getObject()));
     }
   }
 }
