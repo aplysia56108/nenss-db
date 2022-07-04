@@ -1,5 +1,4 @@
 import BPlusTree from '../../b-plus-tree';
-import InnerObject from '../../inner-object';
 import { UnexpectedDataTypeToInsertError } from '../error';
 import { Data, InnerObjectData } from '../types';
 
