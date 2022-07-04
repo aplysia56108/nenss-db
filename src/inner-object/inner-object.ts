@@ -98,13 +98,13 @@ class InnerObject {
     if (this.parent === null) {
       return;
     }
-    if (this.object instanceof BPlusTree) {
-      if (this.object.size() === 0) {
-        this.delete();
+    if (this.parent.object instanceof BPlusTree) {
+      if (this.parent.object.size() === 0) {
+        this.parent.delete();
         this.parent.rollBack();
         return;
       }
-      this.exeSubscription();
+      this.parent.exeSubscription();
       this.parent.rollBack();
     }
   }

@@ -5,7 +5,7 @@ import Iterator from '../../../src/iterator';
 import { UnexpectedDataTypeToInsertError } from '../../../src/common/error';
 import { Data } from '../../../src/common/types';
 
-describe('toInerData test', () => {
+describe('toInnerData test', () => {
   test('null test', () => {
     const data = DataConverter.toInnerData(null);
     expect(data).toBe(null);
