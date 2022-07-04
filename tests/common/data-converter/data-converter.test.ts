@@ -3,7 +3,7 @@ import InnerObject from '../../../src/inner-object';
 import DataConverter from '../../../src/common/data-converter';
 import Iterator from '../../../src/iterator';
 import { UnexpectedDataTypeToInsertError } from '../../../src/common/error';
-import { Data } from '../../../src/common/types';
+import { Data, nullData } from '../../../src/common/types';
 
 describe('toInnerData test', () => {
   test('null test', () => {
@@ -62,21 +62,17 @@ describe('toInnerData test', () => {
 
 describe('toData test', () => {
   test('null test', () => {
-    const object = InnerObject.prototype;
     const obj = new BPlusTree<string, InnerObject>();
-    const mockGetObject = jest.spyOn(object, 'getObject').mockReturnValue(obj);
-    const mockSize = jest.spyOn(obj, 'size').mockReturnValue(0);
-    expect(DataConverter.toData(object)).toEqual(null);
-    mockGetObject.mockRestore();
-    mockSize.mockRestore();
+    expect(DataConverter.toData(obj)).toEqual(null);
+  });
+
+  test('null test2', () => {
+    expect(DataConverter.toData(nullData)).toEqual(null);
   });
 
   test('string test', () => {
-    const object = InnerObject.prototype;
     const obj = 'test';
-    const mockGetObject = jest.spyOn(object, 'getObject').mockReturnValue(obj);
-    expect(DataConverter.toData(object)).toEqual('test');
-    mockGetObject.mockRestore();
+    expect(DataConverter.toData(obj)).toEqual('test');
   });
 
   test('object test', () => {
@@ -104,7 +100,7 @@ describe('toData test', () => {
     output['number'] = 5;
     output['boolean'] = false;
     output['string'] = 'test';
-    const data = DataConverter.toData(object);
+    const data = DataConverter.toData(object.getObject());
     expect(data).toEqual(output);
     expect(mockNext.mock.calls.length).toBe(3);
     mockGetObject.mockRestore();
