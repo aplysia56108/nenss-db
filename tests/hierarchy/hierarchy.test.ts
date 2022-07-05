@@ -57,78 +57,62 @@ describe('hierarchy test', () => {
 
   test('set test', () => {
     const hierarchy = new Hierarchy(5);
-    const innerObject = new InnerObject({}, '', 10);
-    const mockGet = jest
-      .spyOn(Hierarchy.prototype as any, 'get')
-      .mockReturnValue(innerObject);
-    const mockRollBack = jest.spyOn(innerObject, 'rollBack');
+    const mockRollBack = jest.spyOn(InnerObject.prototype, 'rollBack');
+    const subscription = jest.fn(callback);
+    hierarchy.subscribe('/apple/color', 'a', subscription);
     hierarchy.set(['', 'apple', 'color'], 'red');
-    expect(DataConverter.toData(innerObject.getObject())).toEqual('red');
-    expect(mockGet.mock.calls.length).toBe(1);
-    expect(mockRollBack.mock.calls.length).toBe(1);
-    mockGet.mockRestore();
+    expect(
+      DataConverter.toData(hierarchy.search(['', 'apple', 'color'])),
+    ).toEqual('red');
+    expect(mockRollBack.mock.calls.length).toBe(3);
+    expect(subscription.mock.calls.length).toBe(1);
     mockRollBack.mockRestore();
   });
 
   test('push test', () => {
     const hierarchy = new Hierarchy(5);
-    const innerObject = new InnerObject({}, '', 10);
-    const mockGet = jest
-      .spyOn(Hierarchy.prototype as any, 'get')
-      .mockReturnValue(innerObject);
-    const mockRollBack = jest.spyOn(innerObject, 'rollBack');
-    const mockExeSubscription = jest.spyOn(innerObject, 'exeSubscription');
+    const mockRollBack = jest.spyOn(InnerObject.prototype, 'rollBack');
+    const subscription = jest.fn(callback);
+    hierarchy.subscribe('/apple/color', 'a', subscription);
     hierarchy.push(['', 'apple'], 'red', 'color');
-    expect(DataConverter.toData(innerObject.getObject())).toEqual({
+    expect(DataConverter.toData(hierarchy.search(['', 'apple']))).toEqual({
       ['color']: 'red',
     });
-    expect(mockGet.mock.calls.length).toBe(1);
-    expect(mockExeSubscription.mock.calls.length).toBe(1);
-    expect(mockRollBack.mock.calls.length).toBe(1);
-    mockGet.mockRestore();
-    mockExeSubscription.mockRestore();
+    expect(mockRollBack.mock.calls.length).toBe(2);
+    expect(subscription.mock.calls.length).toBe(1);
     mockRollBack.mockRestore();
   });
 
   test('update test', () => {
     const hierarchy = new Hierarchy(5);
-    const innerObject = new InnerObject({}, '', 10);
-    const mockGet = jest
-      .spyOn(Hierarchy.prototype as any, 'get')
-      .mockReturnValue(innerObject);
-    const mockRollBack = jest.spyOn(innerObject, 'rollBack');
-    const mockExeSubscription = jest.spyOn(innerObject, 'exeSubscription');
+    const mockRollBack = jest.spyOn(InnerObject.prototype, 'rollBack');
+    const subscription = jest.fn(callback);
+    hierarchy.subscribe('/fruit', 'a', subscription);
     hierarchy.update(['', 'fruit'], {
       ['apple']: 'red',
       ['banana']: 'yellow',
       ['orange']: 'orange',
     });
-    expect(DataConverter.toData(innerObject.getObject())).toEqual({
+    expect(DataConverter.toData(hierarchy.search(['', 'fruit']))).toEqual({
       ['apple']: 'red',
       ['banana']: 'yellow',
       ['orange']: 'orange',
     });
-    expect(mockGet.mock.calls.length).toBe(1);
-    expect(mockExeSubscription.mock.calls.length).toBe(1);
-    expect(mockRollBack.mock.calls.length).toBe(1);
-    mockGet.mockRestore();
-    mockExeSubscription.mockRestore();
+    expect(mockRollBack.mock.calls.length).toBe(2);
+    expect(subscription.mock.calls.length).toBe(1);
     mockRollBack.mockRestore();
   });
 
   test('delete test', () => {
     const hierarchy = new Hierarchy(5);
-    const innerObject = new InnerObject({}, '', 10);
-    innerObject.set(5);
-    const mockGet = jest
-      .spyOn(Hierarchy.prototype as any, 'get')
-      .mockReturnValue(innerObject);
-    const mockRollBack = jest.spyOn(innerObject, 'rollBack');
+    const mockRollBack = jest.spyOn(InnerObject.prototype, 'rollBack');
+    hierarchy.set(['', 'apple', 'color'], 'red');
     hierarchy.delete(['', 'apple', 'color']);
-    expect(DataConverter.toData(innerObject.getObject())).toEqual(null);
-    expect(mockGet.mock.calls.length).toBe(1);
-    expect(mockRollBack.mock.calls.length).toBe(1);
-    mockGet.mockRestore();
+    expect(
+      DataConverter.toData(hierarchy.search(['', 'apple', 'color'])),
+    ).toEqual(null);
+    expect(DataConverter.toData(hierarchy.search(['']))).toEqual(null);
+    expect(mockRollBack.mock.calls.length).toBe(6);
     mockRollBack.mockRestore();
   });
 
