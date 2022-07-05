@@ -3,7 +3,7 @@ import { Snapshot } from '../snapshot';
 import {
   Data,
   InnerObjectData,
-  nullData,
+  NullData,
   Subscriptions,
 } from '../common/types';
 
@@ -90,7 +90,7 @@ class InnerObject {
         this.object.begin().getItem().delete();
       }
     } else {
-      this.object = nullData;
+      this.object = new NullData();
     }
     if (this.parent !== null) {
       const dir = this.parent.getObject();

@@ -1,12 +1,12 @@
 import BPlusTree from '../../src/b-plus-tree';
 import InnerObject from '../../src/inner-object';
-import { nullData } from '../../src/common/types';
+import { NullData } from '../../src/common/types';
 import DataWrapper from '../../src/data-wrapper';
 
 test('nullData test', () => {
   const dataWrapper = new DataWrapper();
-  dataWrapper.setData(nullData);
-  expect(dataWrapper.getData()).toEqual(nullData);
+  dataWrapper.setData(new NullData());
+  expect(dataWrapper.getData()).toEqual(new NullData());
 });
 
 test('value test', () => {

@@ -1,5 +1,5 @@
 import InnerObject from '../../src/inner-object';
-import { nullData } from '../../src/common/types';
+import { NullData } from '../../src/common/types';
 import { Snapshot } from '../../src/snapshot';
 
 test('null test', () => {
@@ -10,7 +10,7 @@ test('null test', () => {
 });
 
 test('null test2', () => {
-  const snapshot = new Snapshot(nullData);
+  const snapshot = new Snapshot(new NullData());
   expect(snapshot.val()).toBe(null);
   expect(snapshot.exists()).toBe(false);
 });

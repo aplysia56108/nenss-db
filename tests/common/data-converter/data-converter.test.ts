@@ -3,7 +3,7 @@ import InnerObject from '../../../src/inner-object';
 import DataConverter from '../../../src/common/data-converter';
 import Iterator from '../../../src/iterator';
 import { UnexpectedDataTypeToInsertError } from '../../../src/common/error';
-import { Data, nullData } from '../../../src/common/types';
+import { Data, NullData } from '../../../src/common/types';
 
 describe('toInnerData test', () => {
   test('null test', () => {
@@ -67,7 +67,7 @@ describe('toData test', () => {
   });
 
   test('null test2', () => {
-    expect(DataConverter.toData(nullData)).toEqual(null);
+    expect(DataConverter.toData(new NullData())).toEqual(null);
   });
 
   test('string test', () => {

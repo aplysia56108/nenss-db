@@ -6,18 +6,14 @@ import InnerObject from '../../inner-object';
 
 type Data = number | string | boolean | { [key: string]: Data | null };
 type Func<T = any> = (data: Snapshot<T>) => void;
-type InnerObjectTree = BPlusTree<string, InnerObject>;
-type InnerObjectData = InnerObjectTree | number | string | boolean;
+type InnerObjectData =
+  | BPlusTree<string, InnerObject>
+  | number
+  | string
+  | boolean;
 type Subscriptions = {
   [ref: string]: { [id: string]: Func };
 };
-const nullData = null as InnerObjectData;
+class NullData extends BPlusTree<string, InnerObject> {}
 
-export {
-  Data,
-  Func,
-  InnerObjectTree,
-  InnerObjectData,
-  Subscriptions,
-  nullData,
-};
+export { Data, Func, InnerObjectData, Subscriptions, NullData };

@@ -1,6 +1,6 @@
 import BPlusTree from '../../b-plus-tree';
 import { UnexpectedDataTypeToInsertError } from '../error';
-import { Data, InnerObjectData } from '../types';
+import { Data, InnerObjectData, NullData } from '../types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -37,7 +37,7 @@ class DataConverter {
   }
 
   public static toData<T = any>(object: InnerObjectData): T {
-    if (object === null) {
+    if (object instanceof NullData) {
       return null as unknown as T;
     }
     if (object instanceof BPlusTree) {

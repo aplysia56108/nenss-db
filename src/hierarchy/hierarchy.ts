@@ -4,7 +4,7 @@ import {
   Data,
   Func,
   Subscriptions,
-  nullData,
+  NullData,
   InnerObjectData,
 } from '../common/types';
 
@@ -29,12 +29,12 @@ class Hierarchy {
     for (let i = 1; i < refArray.length; i++) {
       const obj = presentInnerObject.getObject();
       if (!(obj instanceof BPlusTree)) {
-        return nullData;
+        return new NullData();
       }
       if (obj instanceof BPlusTree) {
         const innerObject = obj.search(refArray[i]);
         if (innerObject === null) {
-          return nullData;
+          return new NullData();
         }
         presentInnerObject = innerObject.getItem();
       }
