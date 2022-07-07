@@ -2,7 +2,10 @@ import BPlusTree from '../../../src/b-plus-tree';
 import InnerObject from '../../../src/inner-object';
 import DataConverter from '../../../src/common/data-converter';
 import Iterator from '../../../src/iterator';
-import { UnexpectedDataTypeToInsertError } from '../../../src/common/error';
+import {
+  InvalidKeyStringError,
+  UnexpectedDataTypeToInsertError,
+} from '../../../src/common/error';
 import { Data, NullData } from '../../../src/common/types';
 
 describe('toInnerData test', () => {
@@ -57,6 +60,18 @@ describe('toInnerData test', () => {
     output['string'] = 'test';
     output['object'] = { ['key']: 'item' };
     expect(data).toEqual(output);
+  });
+
+  test('object invalid key test', () => {
+    const input = {
+      number: 1,
+      boolean: false,
+      string: 'test',
+      object: { ['key^']: 'item' },
+    };
+    expect(() => DataConverter.toInnerData(input)).toThrow(
+      InvalidKeyStringError,
+    );
   });
 });
 
