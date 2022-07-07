@@ -20,10 +20,6 @@ class Hierarchy {
     this.order = order;
   }
 
-  public getSubscriptions() {
-    return this.subscriptions;
-  }
-
   public search(refArray: string[]): InnerObjectData {
     let presentInnerObject: InnerObject = this.homeDir;
     for (let i = 1; i < refArray.length; i++) {
@@ -118,8 +114,14 @@ class Hierarchy {
   }
 
   public clearSubscriptions() {
-    this.subscribedRefs = {};
-    this.subscriptions = {};
+    const refs = Object.keys(this.subscriptions);
+    for (let i = 0; i < refs.length; i++) {
+      delete this.subscriptions[refs[i]];
+    }
+    const ids = Object.keys(this.subscribedRefs);
+    for (let i = 0; i < ids.length; i++) {
+      delete this.subscribedRefs[ids[i]];
+    }
   }
 }
 
