@@ -1,9 +1,9 @@
 import {
   Data,
   Func,
-  InnerObjectTree,
   InnerObjectData,
   Subscriptions,
+  NullData,
 } from './inner-object-types';
 
-export { Data, Func, InnerObjectTree, InnerObjectData, Subscriptions };
+export { Data, Func, InnerObjectData, Subscriptions, NullData };

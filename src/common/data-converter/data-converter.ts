@@ -1,7 +1,6 @@
 import BPlusTree from '../../b-plus-tree';
-import InnerObject from '../../inner-object';
 import { UnexpectedDataTypeToInsertError } from '../error';
-import { Data } from '../types';
+import { Data, InnerObjectData, NullData } from '../types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -37,21 +36,25 @@ class DataConverter {
     throw new UnexpectedDataTypeToInsertError(typeof obj);
   }
 
-  public static toData<T = any>(object: InnerObject): T {
-    const obj = object.getObject();
-    if (obj instanceof BPlusTree) {
-      if (obj.size() === 0) {
+  public static toData<T = any>(object: InnerObjectData): T {
+    if (object instanceof NullData) {
+      return null as unknown as T;
+    }
+    if (object instanceof BPlusTree) {
+      if (object.size() === 0) {
         return null as unknown as T;
       }
       const data: Data = {};
-      const iterator = obj.begin();
-      for (let i = 0; i < obj.size(); i++) {
-        data[iterator.getKey()] = DataConverter.toData(iterator.getItem());
+      const iterator = object.begin();
+      for (let i = 0; i < object.size(); i++) {
+        data[iterator.getKey()] = DataConverter.toData(
+          iterator.getItem().getObject(),
+        );
         iterator.next();
       }
       return data as unknown as T;
     }
-    return obj as unknown as T;
+    return object as unknown as T;
   }
 }
 

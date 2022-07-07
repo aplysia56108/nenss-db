@@ -200,7 +200,7 @@ describe('innerObject test', () => {
         ['key']: 'item',
       },
     };
-    expect(DataConverter.toData(innerObject)).toEqual(output);
+    expect(DataConverter.toData(innerObject.getObject())).toEqual(output);
   });
 
   describe('delete test', () => {
@@ -230,6 +230,8 @@ describe('innerObject test', () => {
       const mockDelete1 = jest.spyOn(innerObject, 'delete');
       const mockDelete2 = jest.spyOn(subInnerObject, 'delete');
       innerObject.delete();
+      expect(DataConverter.toData(subInnerObject.getObject())).toBe(null);
+      expect(DataConverter.toData(innerObject.getObject())).toBe(null);
       expect(mockErase.mock.calls.length).toBe(3);
       expect(mockExeSubscription1.mock.calls.length).toBe(1);
       expect(mockExeSubscription2.mock.calls.length).toBe(3);
@@ -329,9 +331,13 @@ describe('innerObject test', () => {
     test('test', () => {
       const subscription = jest.fn(callback);
       const subscriptions = {
-        ['/']: [subscription, subscription, subscription],
-        ['/apple']: [subscription, subscription],
-        ['/apple/orange']: [subscription],
+        ['/']: {
+          ['a']: subscription,
+          ['b']: subscription,
+          ['c']: subscription,
+        },
+        ['/apple']: { ['d']: subscription, ['e']: subscription },
+        ['/apple/orange']: { ['f']: subscription },
       };
       const innerObject1 = new InnerObject(subscriptions, '', 5);
       innerObject1.exeSubscription();
