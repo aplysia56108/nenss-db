@@ -1,3 +1,4 @@
-import Greeting from './greeting';
+import Tsdb from './tsdb';
+import { ISnapshot } from './snapshot';
 
-Greeting.sayHello('TypeScript');
+export { Tsdb, ISnapshot };
