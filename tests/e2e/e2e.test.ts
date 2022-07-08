@@ -1,10 +1,8 @@
 import { jest } from '@jest/globals';
-import ITsdb from '../../src/tsdb/i-tsdb';
-import { ISnapshot } from '../../src/snapshot';
+import { Tsdb, ISnapshot } from '../../src';
 
-const createNewTsdb = (): ITsdb => {
-  // TODO: replace with real implementation
-  const newTsdb = new Object() as ITsdb;
+const createNewTsdb = (): Tsdb => {
+  const newTsdb = new Tsdb();
   return newTsdb;
 };
 
@@ -13,9 +11,9 @@ const callback = <T = any>(_snapshot: ISnapshot<T>): void => {
   return;
 };
 
-// TODO: remove skip to run test
-describe.skip('E2E Tests', () => {
+describe('E2E Tests', () => {
   test('Read empty db test', async () => {
+    expect.assertions(4);
     const tsdb = createNewTsdb();
     const rootData = await tsdb.get('/');
     expect(rootData.exists()).toBe(false);
@@ -27,6 +25,7 @@ describe.skip('E2E Tests', () => {
   });
 
   test('Set and get map test', async () => {
+    expect.assertions(22);
     const tsdb = createNewTsdb();
     const rootCallback = jest.fn(callback);
     const tomatoCallback = jest.fn(callback);
@@ -85,9 +84,9 @@ describe.skip('E2E Tests', () => {
     tsdb.subscribe('/orange', orangeCallback);
     tsdb.subscribe('/orange/price', orangePriceCallback);
 
-    tsdb.set('/orange/price', 4);
-    tsdb.set('/orange/isVegetable', true);
-    tsdb.set('/orange/isVegetable', false);
+    await tsdb.set('/orange/price', 4);
+    await tsdb.set('/orange/isVegetable', true);
+    await tsdb.set('/orange/isVegetable', false);
 
     const rootCallbackCalls = rootCallback.mock.calls;
     expect(rootCallbackCalls.length).toBe(2);
@@ -126,6 +125,7 @@ describe.skip('E2E Tests', () => {
   });
 
   test('Set and get array test', async () => {
+    expect.assertions(5);
     const tsdb = createNewTsdb();
     const sampleArray = ['zero', 'one', 'two'];
 
@@ -145,6 +145,7 @@ describe.skip('E2E Tests', () => {
   });
 
   test('Push test', async () => {
+    expect.assertions(23);
     const wait = () => new Promise((resolve) => setTimeout(resolve, 5));
 
     const tsdb = createNewTsdb();
@@ -181,7 +182,8 @@ describe.skip('E2E Tests', () => {
     }
   });
 
-  test('Update test', () => {
+  test('Update test', async () => {
+    expect.assertions(5);
     const tsdb = createNewTsdb();
     const sampleData = {
       tomato: {
@@ -195,7 +197,7 @@ describe.skip('E2E Tests', () => {
         isVegetable: false,
       },
     };
-    tsdb.set('/', sampleData);
+    await tsdb.set('/', sampleData);
 
     const rootCallback = jest.fn(callback);
     const tomatoCallback = jest.fn(callback);
@@ -208,7 +210,7 @@ describe.skip('E2E Tests', () => {
     const tomatoUpdateData = {
       price: 2,
     };
-    tsdb.update('/tomato', tomatoUpdateData);
+    await tsdb.update('/tomato', tomatoUpdateData);
 
     const rootCallbackCalls = rootCallback.mock.calls;
     expect(rootCallbackCalls.length).toBe(1);
@@ -231,7 +233,8 @@ describe.skip('E2E Tests', () => {
     expect(appleCallbackCalls.length).toBe(0);
   });
 
-  test('Delete test', () => {
+  test('Delete test', async () => {
+    expect.assertions(11);
     const tsdb = createNewTsdb();
     const sampleData = {
       tomato: {
@@ -245,7 +248,7 @@ describe.skip('E2E Tests', () => {
         isVegetable: false,
       },
     };
-    tsdb.set('/', sampleData);
+    await tsdb.set('/', sampleData);
 
     const rootCallback = jest.fn(callback);
     const tomatoCallback = jest.fn(callback);
@@ -255,8 +258,8 @@ describe.skip('E2E Tests', () => {
     tsdb.subscribe('/tomato', tomatoCallback);
     tsdb.subscribe('/apple', appleCallback);
 
-    tsdb.delete('/tomato');
-    tsdb.set('/apple', null);
+    await tsdb.delete('/tomato');
+    await tsdb.set('/apple', null);
 
     const rootCallbackCalls = rootCallback.mock.calls;
     expect(rootCallbackCalls.length).toBe(2);

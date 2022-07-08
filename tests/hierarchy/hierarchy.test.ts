@@ -11,7 +11,7 @@ const callback = <T = any>(_snapshot: Snapshot<T>): void => {
 };
 
 describe('hierarchy test', () => {
-  test('Subscription test', () => {
+  test('subscription test', async () => {
     const subscriptionA = jest.fn(callback);
     const subscriptionB = jest.fn(callback);
     const subscriptionC = jest.fn(callback);
@@ -27,16 +27,17 @@ describe('hierarchy test', () => {
       ['/apple']: { ['d']: subscriptionD, ['e']: subscriptionE },
       ['/apple/orange']: { ['f']: subscriptionF },
     };
-    const hierarchy = new Hierarchy(5);
+    const hierarchy = new Hierarchy(5) as any;
     hierarchy.subscribe('/', 'a', subscriptionA);
     hierarchy.subscribe('/', 'b', subscriptionB);
     hierarchy.subscribe('/', 'c', subscriptionC);
     hierarchy.subscribe('/apple', 'd', subscriptionD);
     hierarchy.subscribe('/apple', 'e', subscriptionE);
     hierarchy.subscribe('/apple/orange', 'f', subscriptionF);
-    expect(hierarchy.getSubscriptions()).toEqual(subscriptions);
+    expect(() => hierarchy.unsubscribe('g')).toThrow(Error);
+    expect(hierarchy.subscriptions).toEqual(subscriptions);
     hierarchy.unsubscribe('c');
-    expect(hierarchy.getSubscriptions()).toEqual({
+    expect(hierarchy.subscriptions).toEqual({
       ['/']: {
         ['a']: subscriptionA,
         ['b']: subscriptionB,
@@ -46,13 +47,33 @@ describe('hierarchy test', () => {
     });
     hierarchy.unsubscribe('b');
     hierarchy.unsubscribe('a');
-    expect(hierarchy.getSubscriptions()).toEqual({
+    expect(hierarchy.subscriptions).toEqual({
       ['/apple']: { ['d']: subscriptionD, ['e']: subscriptionE },
       ['/apple/orange']: { ['f']: subscriptionF },
     });
     expect(() => hierarchy.unsubscribe('a')).toThrow(Error);
+
+    await hierarchy.set(['', 'apple', 'orange'], 'banana');
     hierarchy.clearSubscriptions();
-    expect(hierarchy.getSubscriptions()).toEqual({});
+    await hierarchy.set(['', 'apple', 'orange'], null);
+    expect(hierarchy.subscriptions).toEqual({});
+    expect(hierarchy.subscribedRefs).toEqual({});
+    expect(() => hierarchy.unsubscribe('a')).toThrow(Error);
+    expect(() => hierarchy.unsubscribe('b')).toThrow(Error);
+    expect(() => hierarchy.unsubscribe('c')).toThrow(Error);
+    expect(() => hierarchy.unsubscribe('d')).toThrow(Error);
+    expect(() => hierarchy.unsubscribe('e')).toThrow(Error);
+    expect(() => hierarchy.unsubscribe('f')).toThrow(Error);
+    expect(subscriptionD.mock.calls.length).toBe(1);
+    expect(subscriptionD.mock.calls[0][0].val()).toEqual({
+      ['orange']: 'banana',
+    });
+    expect(subscriptionE.mock.calls.length).toBe(1);
+    expect(subscriptionE.mock.calls[0][0].val()).toEqual({
+      ['orange']: 'banana',
+    });
+    expect(subscriptionF.mock.calls.length).toBe(1);
+    expect(subscriptionF.mock.calls[0][0].val()).toEqual('banana');
   });
 
   test('set test', () => {
