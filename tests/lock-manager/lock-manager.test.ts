@@ -29,6 +29,7 @@ test('lockingRefIterator test', () => {
 });
 
 test('assort and execute and release test', async () => {
+  expect.assertions(8);
   const mockFunction = jest.fn(doSomething);
   const lockManager = new LockManager(1);
   const query1 = new Query(mockFunction, '/');
