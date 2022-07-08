@@ -71,116 +71,39 @@ describe('innerObject test', () => {
 
     test('object to tree test', () => {
       const innerObject = new InnerObject({}, '', 5);
-      const object = new BPlusTree<string, InnerObject>(10);
-      const input: Data = {};
-      input['number'] = 5;
-      input['boolean'] = false;
-      input['string'] = 'test';
+      const input = {
+        ['number']: 5,
+        ['boolean']: false,
+        ['string']: 'test',
+      };
       const mockExeSubscription = jest.spyOn(innerObject, 'exeSubscription');
-      const mockPush = jest
-        .spyOn(InnerObject.prototype, 'push')
-        .mockImplementation((key: string) => {
-          return input[key];
-        });
-      innerObject.setObject(object);
       innerObject.set(input);
       expect(mockExeSubscription.mock.calls.length).toBe(1);
-      expect(mockPush.mock.calls.length).toBe(3);
-      expect(mockPush.mock.calls[0][0]).toBe('number');
-      expect(mockPush.mock.calls[1][0]).toBe('boolean');
-      expect(mockPush.mock.calls[2][0]).toBe('string');
-      expect(mockPush.mock.results[0].value).toBe(5);
-      expect(mockPush.mock.results[1].value).toBe(false);
-      expect(mockPush.mock.results[2].value).toBe('test');
-      expect(innerObject.getObject()).toEqual(
-        new BPlusTree<string, InnerObject>(5),
-      );
+      expect(DataConverter.toData(innerObject.getObject())).toEqual(input);
       mockExeSubscription.mockRestore();
-      mockPush.mockRestore();
     });
 
     test('object to value test', () => {
       const innerObject = new InnerObject({}, '', 5);
       const object = 5;
-      const input: Data = {};
-      input['number'] = 5;
-      input['boolean'] = false;
-      input['string'] = 'test';
+      const input = {
+        ['number']: 5,
+        ['boolean']: false,
+        ['string']: 'test',
+      };
       innerObject.setObject(object);
       const mockSetObject = jest.spyOn(innerObject, 'setObject');
       const mockExeSubscription = jest.spyOn(innerObject, 'exeSubscription');
-      const mockPush = jest
-        .spyOn(InnerObject.prototype, 'push')
-        .mockImplementation((key: string) => {
-          return input[key];
-        });
       innerObject.set(input);
       expect(mockExeSubscription.mock.calls.length).toBe(1);
-      expect(mockPush.mock.calls.length).toBe(3);
-      expect(mockPush.mock.calls[0][0]).toBe('number');
-      expect(mockPush.mock.calls[1][0]).toBe('boolean');
-      expect(mockPush.mock.calls[2][0]).toBe('string');
-      expect(mockPush.mock.results[0].value).toBe(5);
-      expect(mockPush.mock.results[1].value).toBe(false);
-      expect(mockPush.mock.results[2].value).toBe('test');
-      expect(mockSetObject.mock.calls.length).toEqual(0);
+      expect(mockSetObject.mock.calls.length).toEqual(1);
+      expect(DataConverter.toData(innerObject.getObject())).toEqual(input);
       mockSetObject.mockRestore();
       mockExeSubscription.mockRestore();
-      mockPush.mockRestore();
     });
   });
 
-  describe('push test', () => {
-    test('to value test', () => {
-      const innerObject = new InnerObject({}, '', 5);
-      const object = 5;
-      const input: Data = {};
-      input['number'] = 5;
-      input['boolean'] = false;
-      input['string'] = 'test';
-      innerObject.setObject(object);
-      const mockSetObject = jest.spyOn(innerObject, 'setObject');
-      const ref = 'ref';
-      const mockSet = jest
-        .spyOn(InnerObject.prototype, 'set')
-        .mockImplementation((input) => {
-          input;
-          return;
-        });
-
-      innerObject.push(ref, input);
-      expect(mockSetObject.mock.calls.length).toBe(1);
-      expect(mockSet.mock.calls.length).toBe(1);
-      expect(mockSet.mock.calls[0][0]).toEqual(input);
-      mockSetObject.mockRestore();
-      mockSet.mockRestore();
-    });
-
-    test('to tree test', () => {
-      const innerObject = new InnerObject({}, '', 5);
-      const input: Data = {};
-      input['number'] = 5;
-      input['boolean'] = false;
-      input['string'] = 'test';
-      const mockSetObject = jest.spyOn(innerObject, 'setObject');
-      const ref = 'ref';
-      const mockSet = jest
-        .spyOn(InnerObject.prototype, 'set')
-        .mockImplementation((input) => {
-          input;
-          return;
-        });
-
-      innerObject.push(ref, input);
-      expect(mockSetObject.mock.calls.length).toBe(0);
-      expect(mockSet.mock.calls.length).toBe(1);
-      expect(mockSet.mock.calls[0][0]).toEqual(input);
-      mockSetObject.mockRestore();
-      mockSet.mockRestore();
-    });
-  });
-
-  describe('set and push test', () => {
+  describe('set recursive test', () => {
     const innerObject = new InnerObject({}, '', 5);
     const object: Data = {
       ['boolean']: true,
@@ -254,12 +177,12 @@ describe('innerObject test', () => {
   describe('rollBack test', () => {
     test('null test', () => {
       const innerObject = new InnerObject({}, '', 5);
-      const mockRollBack = jest.spyOn(InnerObject.prototype, 'rollBack');
+      const mockRollBack = jest.spyOn(InnerObject.prototype, 'rollback');
       const mockExeSubscription = jest.spyOn(
         InnerObject.prototype,
         'exeSubscription',
       );
-      innerObject.rollBack();
+      innerObject.rollback();
       expect(mockRollBack.mock.calls.length).toBe(1);
       expect(mockExeSubscription.mock.calls.length).toBe(0);
       mockExeSubscription.mockRestore();
@@ -274,14 +197,14 @@ describe('innerObject test', () => {
         subInnerObject,
         'exeSubscription',
       );
-      const mockRollBack1 = jest.spyOn(innerObject, 'rollBack');
-      const mockRollBack2 = jest.spyOn(subInnerObject, 'rollBack');
+      const mockRollBack1 = jest.spyOn(innerObject, 'rollback');
+      const mockRollBack2 = jest.spyOn(subInnerObject, 'rollback');
       const mockDelete = jest
         .spyOn(InnerObject.prototype, 'delete')
         .mockImplementation(() => {
           return;
         });
-      subInnerObject.rollBack();
+      subInnerObject.rollback();
       expect(mockRollBack1.mock.calls.length).toBe(1);
       expect(mockExeSubscription1.mock.calls.length).toBe(0);
       expect(mockRollBack2.mock.calls.length).toBe(1);
@@ -302,8 +225,8 @@ describe('innerObject test', () => {
         subInnerObject,
         'exeSubscription',
       );
-      const mockRollBack1 = jest.spyOn(innerObject, 'rollBack');
-      const mockRollBack2 = jest.spyOn(subInnerObject, 'rollBack');
+      const mockRollBack1 = jest.spyOn(innerObject, 'rollback');
+      const mockRollBack2 = jest.spyOn(subInnerObject, 'rollback');
       const mockDelete = jest
         .spyOn(InnerObject.prototype, 'delete')
         .mockImplementation(() => {
@@ -312,7 +235,7 @@ describe('innerObject test', () => {
       const mockSize = jest
         .spyOn(BPlusTree.prototype, 'size')
         .mockReturnValue(1);
-      subInnerObject.rollBack();
+      subInnerObject.rollback();
       expect(mockRollBack1.mock.calls.length).toBe(1);
       expect(mockExeSubscription1.mock.calls.length).toBe(1);
       expect(mockRollBack2.mock.calls.length).toBe(1);
