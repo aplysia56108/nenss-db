@@ -2,7 +2,7 @@ import { InvalidReferenceError } from '../error';
 
 class RefChecker {
   static isValidString(key: string): boolean {
-    if (key === '') {
+    if (key === '' || key.length > 1000) {
       return false;
     }
     const re = RegExp(/[^0-9a-zA-Z\-_]/);

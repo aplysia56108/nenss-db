@@ -44,6 +44,14 @@ test('isValidString test', () => {
   expect(refChecker.isValidString('>')).toBe(false);
   expect(refChecker.isValidString('2aS-\\')).toBe(false);
   expect(refChecker.isValidString('')).toBe(false);
+  let tooLongString = '';
+  for (let i = 0; i < 1000; i++) {
+    tooLongString += '-';
+  }
+  expect(tooLongString.length).toBe(1000);
+  expect(refChecker.isValidString(tooLongString)).toBe(true);
+  tooLongString += '-';
+  expect(refChecker.isValidString(tooLongString)).toBe(false);
 });
 
 test('isValidRefArray test', () => {
