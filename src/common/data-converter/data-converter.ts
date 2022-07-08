@@ -1,8 +1,5 @@
 import BPlusTree from '../../b-plus-tree';
-import {
-  UnexpectedDataTypeToInsertError,
-  InvalidKeyStringError,
-} from '../error';
+import { UnexpectedDataTypeToInsertError } from '../error';
 import RefChecker from '../ref-checker';
 import { Data, InnerObjectData, NullData } from '../types';
 
@@ -31,9 +28,7 @@ class DataConverter {
         for (let i = 0; i < keys.length; i++) {
           const key = keys[i] as keyof T;
           const keyString = key.toString();
-          if (!RefChecker.isValidString(keyString)) {
-            throw new InvalidKeyStringError();
-          }
+          RefChecker.checkRefString(keyString);
           innerData[keyString] = this.toInnerData(reInterpretationOfObj[key]);
         }
       }
