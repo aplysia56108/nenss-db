@@ -56,10 +56,17 @@ class Tsdb implements ITsdb {
     } else {
       newKey = key;
     }
-    this.lockManager.assort(
-      new Query(() => this.db.push(refArray, innerData, newKey), ref),
-    );
-    // in this arrange, key can be returned before data is pushed.
+    await new Promise((resolve) => {
+      this.lockManager.assort(
+        new Query(
+          () =>
+            this.db
+              .push(refArray, innerData, newKey)
+              .then(() => resolve(void 0)),
+          ref,
+        ),
+      );
+    });
     return newKey;
   }
 
