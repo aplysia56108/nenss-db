@@ -79,22 +79,25 @@ class Tsdb implements ITsdb {
     const promiseArray: Promise<void>[] = [];
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
-      refArray.push(key);
       const newRef = ref + '/' + key;
+      const newRefArray: string[] = new Array(refArray.length + 1);
+      for (let i = 0; i < refArray.length; i++) {
+        newRefArray[i] = refArray[i];
+      }
+      newRefArray[refArray.length] = key;
       promiseArray.push(
         new Promise((resolve) => {
           this.lockManager.assort(
             new Query(
               () =>
                 this.db
-                  .nonRollbackSet(refArray, innerData[key])
+                  .nonRollbackSet(newRefArray, innerData[key])
                   .then(() => resolve(void 0)),
               newRef,
             ),
           );
         }),
       );
-      refArray.pop();
     }
     await Promise.all(promiseArray);
     this.db.rollback(refArray);

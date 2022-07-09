@@ -143,82 +143,84 @@ test('push test', async () => {
   expect(mockFunction.mock.calls[1][0]).toBe('color');
   expect(mockSet.mock.calls.length).toBe(1);
   mockSet.mockRestore();
+  mockFunction.mockRestore();
 });
 
 test('update test', async () => {
   expect.assertions(24);
-  const tsdb = new Tsdb();
+  const tsdb = new Tsdb() as any;
+  const db = tsdb.db;
   const mockFunction = jest.fn((message: string) => message);
   const mockSet = jest
-    .spyOn(Hierarchy.prototype, 'nonRollbackSet')
+    .spyOn(db, 'nonRollbackSet')
     .mockImplementationOnce(async (refArray: string[], data: Data | null) => {
-      refArray;
-      data;
       mockFunction(data as unknown as string);
       await new Promise((resolve) => setTimeout(resolve, 200));
+      const innerObject = db.get(refArray);
+      innerObject.set(data);
       mockFunction(data as unknown as string);
     })
     .mockImplementationOnce(async (refArray: string[], data: Data | null) => {
-      refArray;
-      data;
       mockFunction(data as unknown as string);
       await new Promise((resolve) => setTimeout(resolve, 100));
+      const innerObject = db.get(refArray);
+      innerObject.set(data);
       mockFunction(data as unknown as string);
     })
     .mockImplementationOnce(async (refArray: string[], data: Data | null) => {
-      refArray;
-      data;
       mockFunction(data as unknown as string);
       await new Promise((resolve) => setTimeout(resolve, 50));
+      const innerObject = db.get(refArray);
+      innerObject.set(data);
       mockFunction(data as unknown as string);
     })
     .mockImplementationOnce(async (refArray: string[], data: Data | null) => {
-      refArray;
-      data;
       mockFunction(data as unknown as string);
       await new Promise((resolve) => setTimeout(resolve, 250));
+      const innerObject = db.get(refArray);
+      innerObject.set(data);
       mockFunction(data as unknown as string);
     })
     .mockImplementationOnce(async (refArray: string[], data: Data | null) => {
-      refArray;
-      data;
       mockFunction(data as unknown as string);
       await new Promise((resolve) => setTimeout(resolve, 150));
+      const innerObject = db.get(refArray);
+      innerObject.set(data);
       mockFunction(data as unknown as string);
     })
     .mockImplementationOnce(async (refArray: string[], data: Data | null) => {
-      refArray;
-      data;
       mockFunction(data as unknown as string);
       await new Promise((resolve) => setTimeout(resolve, 50));
+      const innerObject = db.get(refArray);
+      innerObject.set(data);
       mockFunction(data as unknown as string);
     })
     .mockImplementationOnce(async (refArray: string[], data: Data | null) => {
-      refArray;
-      data;
       mockFunction(data as unknown as string);
       await new Promise((resolve) => setTimeout(resolve, 200));
+      const innerObject = db.get(refArray);
+      innerObject.set(data);
       mockFunction(data as unknown as string);
     })
     .mockImplementationOnce(async (refArray: string[], data: Data | null) => {
-      refArray;
-      data;
       mockFunction(data as unknown as string);
       await new Promise((resolve) => setTimeout(resolve, 250));
+      const innerObject = db.get(refArray);
+      innerObject.set(data);
       mockFunction(data as unknown as string);
     })
     .mockImplementationOnce(async (refArray: string[], data: Data | null) => {
-      refArray;
-      data;
       mockFunction(data as unknown as string);
       await new Promise((resolve) => setTimeout(resolve, 100));
+      const innerObject = db.get(refArray);
+      innerObject.set(data);
       mockFunction(data as unknown as string);
     })
     .mockImplementationOnce(async (refArray: string[], data: Data | null) => {
-      refArray;
-      data;
       mockFunction(data as unknown as string);
       await new Promise((resolve) => setTimeout(resolve, 150));
+      const innerObject = db.get(refArray);
+      innerObject.set(data);
       mockFunction(data as unknown as string);
     });
   tsdb.subscribe('/', <T = any>(_snapshot: ISnapshot<T>): void => {
