@@ -1,73 +1,83 @@
-import { InvalidReferenceError } from '../../../src/common/error';
+import {
+  InvalidReferenceError,
+  InvalidKeyStringError,
+} from '../../../src/common/error';
 import RefChecker from '../../../src/common/ref-checker';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-test('isValidString test', () => {
+test('checkRefString test', () => {
   const refChecker = RefChecker as any;
-  expect(refChecker.isValidString('aaa')).toBe(true);
-  expect(refChecker.isValidString('AAA')).toBe(true);
-  expect(refChecker.isValidString('111')).toBe(true);
-  expect(refChecker.isValidString('0sE')).toBe(true);
-  expect(refChecker.isValidString('___')).toBe(true);
-  expect(refChecker.isValidString('---')).toBe(true);
-  expect(refChecker.isValidString('_A-z_9')).toBe(true);
-  expect(refChecker.isValidString('+')).toBe(false);
-  expect(refChecker.isValidString('/')).toBe(false);
-  expect(refChecker.isValidString('¥')).toBe(false);
-  expect(refChecker.isValidString('\\')).toBe(false);
-  expect(refChecker.isValidString('?')).toBe(false);
-  expect(refChecker.isValidString('@')).toBe(false);
-  expect(refChecker.isValidString('(')).toBe(false);
-  expect(refChecker.isValidString(')')).toBe(false);
-  expect(refChecker.isValidString('"')).toBe(false);
-  expect(refChecker.isValidString('!')).toBe(false);
-  expect(refChecker.isValidString('#')).toBe(false);
-  expect(refChecker.isValidString('$')).toBe(false);
-  expect(refChecker.isValidString('%')).toBe(false);
-  expect(refChecker.isValidString('&')).toBe(false);
-  expect(refChecker.isValidString("'")).toBe(false);
-  expect(refChecker.isValidString('^')).toBe(false);
-  expect(refChecker.isValidString('~')).toBe(false);
-  expect(refChecker.isValidString('=')).toBe(false);
-  expect(refChecker.isValidString('|')).toBe(false);
-  expect(refChecker.isValidString('{')).toBe(false);
-  expect(refChecker.isValidString('}')).toBe(false);
-  expect(refChecker.isValidString('[')).toBe(false);
-  expect(refChecker.isValidString(']')).toBe(false);
-  expect(refChecker.isValidString('*')).toBe(false);
-  expect(refChecker.isValidString(';')).toBe(false);
-  expect(refChecker.isValidString(':')).toBe(false);
-  expect(refChecker.isValidString(',')).toBe(false);
-  expect(refChecker.isValidString('.')).toBe(false);
-  expect(refChecker.isValidString('<')).toBe(false);
-  expect(refChecker.isValidString('>')).toBe(false);
-  expect(refChecker.isValidString('2aS-\\')).toBe(false);
-  expect(refChecker.isValidString('')).toBe(false);
+  refChecker.checkRefString('aaa');
+  refChecker.checkRefString('AAA');
+  refChecker.checkRefString('111');
+  refChecker.checkRefString('0sE');
+  refChecker.checkRefString('___');
+  refChecker.checkRefString('---');
+  refChecker.checkRefString('_A-z_9');
+  expect(() => refChecker.checkRefString('+')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('/')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('¥')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('\\')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('?')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('@')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('(')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString(')')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('"')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('!')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('#')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('$')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('%')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('&')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString("'")).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('^')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('~')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('=')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('|')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('{')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('}')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('[')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString(']')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('*')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString(';')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString(':')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString(',')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('.')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('<')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('>')).toThrow(InvalidKeyStringError);
+  expect(() => refChecker.checkRefString('2aS-\\')).toThrow(
+    InvalidKeyStringError,
+  );
+  expect(() => refChecker.checkRefString('')).toThrow(InvalidKeyStringError);
   let tooLongString = '';
-  for (let i = 0; i < 1000; i++) {
-    tooLongString += '-';
+  for (let i = 0; i < 999; i++) {
+    tooLongString += 'a';
   }
-  expect(tooLongString.length).toBe(1000);
-  expect(refChecker.isValidString(tooLongString)).toBe(true);
-  tooLongString += '-';
-  expect(refChecker.isValidString(tooLongString)).toBe(false);
+  expect(refChecker.checkRefString(tooLongString));
+  tooLongString += 'a';
+  expect(() => refChecker.checkRefString(tooLongString)).toThrow(
+    InvalidKeyStringError,
+  );
 });
 
-test('isValidRefArray test', () => {
+test('checkRefArray test', () => {
   const refChecker = RefChecker as any;
-  expect(refChecker.isValidRefArray([''])).toBe(true);
-  expect(refChecker.isValidRefArray(['', '9tT'])).toBe(true);
-  expect(refChecker.isValidRefArray(['9tT', ''])).toBe(false);
-  expect(refChecker.isValidRefArray(['', '/test'])).toBe(false);
+  refChecker.checkRefArray(['']);
+  refChecker.checkRefArray(['', '9tT']);
+  expect(() => refChecker.checkRefArray(['9tT', ''])).toThrow(
+    InvalidReferenceError,
+  );
+  expect(() => refChecker.checkRefArray(['', '/test'])).toThrow(
+    InvalidKeyStringError,
+  );
 });
 
 test('toRefArray test', () => {
   expect(RefChecker.toRefArray('/')).toEqual(['']);
   expect(RefChecker.toRefArray('/apple/123')).toEqual(['', 'apple', '123']);
-  expect(() => RefChecker.toRefArray('//')).toThrow(InvalidReferenceError);
+  expect(() => RefChecker.toRefArray('//')).toThrow(InvalidKeyStringError);
   expect(() => RefChecker.toRefArray('a')).toThrow(InvalidReferenceError);
-  expect(() => RefChecker.toRefArray('/~')).toThrow(InvalidReferenceError);
+  expect(() => RefChecker.toRefArray('/~')).toThrow(InvalidKeyStringError);
 });
 
 test('isIncluded test', () => {

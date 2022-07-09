@@ -54,15 +54,15 @@ class Tsdb implements ITsdb {
     if (key === undefined) {
       newKey = UniqueKey.generate();
     } else {
+      RefChecker.checkRefString(key);
       newKey = key;
     }
+    refArray.push(newKey);
+    ref += '/' + newKey;
     await new Promise((resolve) => {
       this.lockManager.assort(
         new Query(
-          () =>
-            this.db
-              .push(refArray, innerData, newKey)
-              .then(() => resolve(void 0)),
+          () => this.db.set(refArray, innerData).then(() => resolve(void 0)),
           ref,
         ),
       );
@@ -75,9 +75,32 @@ class Tsdb implements ITsdb {
     const innerData = DataConverter.toInnerData(data) as {
       [key: string]: Data;
     };
-    this.lockManager.assort(
-      new Query(() => this.db.update(refArray, innerData), ref),
-    );
+    const keys = Object.keys(innerData);
+    const promiseArray: Promise<void>[] = [];
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const newRef = ref + '/' + key;
+      const newRefArray = new Array<string>(refArray.length + 1);
+      for (let i = 0; i < refArray.length; i++) {
+        newRefArray[i] = refArray[i];
+      }
+      newRefArray[refArray.length] = key;
+      promiseArray.push(
+        new Promise((resolve) => {
+          this.lockManager.assort(
+            new Query(
+              () =>
+                this.db
+                  .nonRollbackSet(newRefArray, innerData[key])
+                  .then(() => resolve(void 0)),
+              newRef,
+            ),
+          );
+        }),
+      );
+    }
+    await Promise.all(promiseArray);
+    this.db.rollback(refArray);
   }
 
   public subscribe<T>(

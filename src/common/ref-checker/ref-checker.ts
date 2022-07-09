@@ -1,25 +1,24 @@
-import { InvalidReferenceError } from '../error';
+import { InvalidReferenceError, InvalidKeyStringError } from '../error';
 
 class RefChecker {
-  static isValidString(key: string): boolean {
-    if (key === '' || key.length > 1000) {
-      return false;
+  static checkRefString(key: string): void {
+    if (key === '' || key.length >= 1000) {
+      throw new InvalidKeyStringError();
     }
     const re = RegExp(/[^0-9a-zA-Z\-_]/);
-    return !re.test(key);
+    if (re.test(key)) {
+      throw new InvalidKeyStringError();
+    }
   }
 
-  private static isValidRefArray(refArray: string[]): boolean {
+  private static checkRefArray(refArray: string[]) {
     if (refArray[0] === '') {
       for (let i = 1; i < refArray.length; i++) {
-        if (RefChecker.isValidString(refArray[i])) {
-          continue;
-        }
-        return false;
+        RefChecker.checkRefString(refArray[i]);
       }
-      return true;
+      return;
     }
-    return false;
+    throw new InvalidReferenceError();
   }
 
   public static toRefArray(ref: string): string[] {
@@ -30,9 +29,7 @@ class RefChecker {
       return [''];
     }
     const refArray = ref.split('/');
-    if (!RefChecker.isValidRefArray(refArray)) {
-      throw new InvalidReferenceError();
-    }
+    RefChecker.checkRefArray(refArray);
     return refArray;
   }
 

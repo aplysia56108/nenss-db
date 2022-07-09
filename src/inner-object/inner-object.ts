@@ -51,12 +51,18 @@ class InnerObject {
       return;
     }
     if (typeof data === 'object') {
-      if (this.object instanceof BPlusTree) {
-        this.setObject(new BPlusTree<string, InnerObject>(this.order));
-      }
+      this.setObject(new BPlusTree<string, InnerObject>(this.order));
       const keys = Object.keys(data);
-      for (let i = 0; i < keys.length; i++) {
-        this.push(keys[i], data[keys[i]]);
+      if (this.object instanceof BPlusTree) {
+        for (let i = 0; i < keys.length; i++) {
+          this.object
+            .push(
+              keys[i],
+              new InnerObject(this.subscriptions, keys[i], this.order, this),
+            )[1]
+            .getItem()
+            .set(data[keys[i]]);
+        }
       }
     } else {
       if (this.object instanceof BPlusTree) {
@@ -67,21 +73,6 @@ class InnerObject {
       this.setObject(data);
     }
     this.exeSubscription();
-  }
-
-  public push(ref: string, data: Data | null) {
-    if (!(this.object instanceof BPlusTree)) {
-      this.setObject(new BPlusTree<string, InnerObject>(this.order));
-    }
-    if (this.object instanceof BPlusTree) {
-      this.object
-        .push(
-          ref,
-          new InnerObject(this.subscriptions, ref, this.order, this),
-        )[1]
-        .getItem()
-        .set(data);
-    }
   }
 
   public delete() {
@@ -101,18 +92,18 @@ class InnerObject {
     this.exeSubscription();
   }
 
-  public rollBack() {
+  public rollback() {
     if (this.parent === null) {
       return;
     }
     if (this.parent.object instanceof BPlusTree) {
       if (this.parent.object.size() === 0) {
         this.parent.delete();
-        this.parent.rollBack();
+        this.parent.rollback();
         return;
       }
       this.parent.exeSubscription();
-      this.parent.rollBack();
+      this.parent.rollback();
     }
   }
 

@@ -11,8 +11,8 @@ import {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 class Hierarchy {
-  private homeDir;
-  private order;
+  private homeDir: InnerObject;
+  private order: number;
   private subscriptions: Subscriptions = {};
   private subscribedRefs: { [id: string]: string } = {};
   constructor(order = BPlusTree.defaultOrder) {
@@ -66,31 +66,24 @@ class Hierarchy {
   public async set(refArray: string[], data: Data | null) {
     const innerObject = this.get(refArray);
     innerObject.set(data);
-    innerObject.rollBack();
+    innerObject.rollback();
   }
 
-  public async push(refArray: string[], data: Data | null, key: string) {
+  public async nonRollbackSet(refArray: string[], data: Data | null) {
     const innerObject = this.get(refArray);
-    innerObject.push(key, data);
-    innerObject.exeSubscription();
-    innerObject.rollBack();
+    innerObject.set(data);
   }
 
-  public async update(refArray: string[], data: { [key: string]: Data }) {
+  public rollback(refArray: string[]) {
     const innerObject = this.get(refArray);
-    const keys = Object.keys(data);
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i];
-      innerObject.push(key, data[key]);
-    }
     innerObject.exeSubscription();
-    innerObject.rollBack();
+    innerObject.rollback();
   }
 
   public async delete(refArray: string[]) {
     const innerObject = this.get(refArray);
     innerObject.delete();
-    innerObject.rollBack();
+    innerObject.rollback();
   }
 
   public subscribe<T = any>(ref: string, id: string, callback: Func<T>) {

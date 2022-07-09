@@ -78,7 +78,7 @@ describe('hierarchy test', () => {
 
   test('set test', () => {
     const hierarchy = new Hierarchy(5);
-    const mockRollBack = jest.spyOn(InnerObject.prototype, 'rollBack');
+    const mockRollBack = jest.spyOn(InnerObject.prototype, 'rollback');
     const subscription = jest.fn(callback);
     hierarchy.subscribe('/apple/color', 'a', subscription);
     hierarchy.set(['', 'apple', 'color'], 'red');
@@ -90,43 +90,9 @@ describe('hierarchy test', () => {
     mockRollBack.mockRestore();
   });
 
-  test('push test', () => {
-    const hierarchy = new Hierarchy(5);
-    const mockRollBack = jest.spyOn(InnerObject.prototype, 'rollBack');
-    const subscription = jest.fn(callback);
-    hierarchy.subscribe('/apple/color', 'a', subscription);
-    hierarchy.push(['', 'apple'], 'red', 'color');
-    expect(DataConverter.toData(hierarchy.search(['', 'apple']))).toEqual({
-      ['color']: 'red',
-    });
-    expect(mockRollBack.mock.calls.length).toBe(2);
-    expect(subscription.mock.calls.length).toBe(1);
-    mockRollBack.mockRestore();
-  });
-
-  test('update test', () => {
-    const hierarchy = new Hierarchy(5);
-    const mockRollBack = jest.spyOn(InnerObject.prototype, 'rollBack');
-    const subscription = jest.fn(callback);
-    hierarchy.subscribe('/fruit', 'a', subscription);
-    hierarchy.update(['', 'fruit'], {
-      ['apple']: 'red',
-      ['banana']: 'yellow',
-      ['orange']: 'orange',
-    });
-    expect(DataConverter.toData(hierarchy.search(['', 'fruit']))).toEqual({
-      ['apple']: 'red',
-      ['banana']: 'yellow',
-      ['orange']: 'orange',
-    });
-    expect(mockRollBack.mock.calls.length).toBe(2);
-    expect(subscription.mock.calls.length).toBe(1);
-    mockRollBack.mockRestore();
-  });
-
   test('delete test', () => {
     const hierarchy = new Hierarchy(5);
-    const mockRollBack = jest.spyOn(InnerObject.prototype, 'rollBack');
+    const mockRollBack = jest.spyOn(InnerObject.prototype, 'rollback');
     hierarchy.set(['', 'apple', 'color'], 'red');
     hierarchy.delete(['', 'apple', 'color']);
     expect(
@@ -165,7 +131,7 @@ describe('hierarchy test', () => {
     expect(DataConverter.toData(nullObject1)).toEqual(null);
     expect(DataConverter.toData(nullObject2.getObject())).toEqual(null);
     subscription.mockClear();
-    nullObject2.rollBack();
+    nullObject2.rollback();
     expect(subscription.mock.calls.length).toEqual(1);
     expect(
       DataConverter.toData(hierarchy.search(['', 'apple', 'red'])),
