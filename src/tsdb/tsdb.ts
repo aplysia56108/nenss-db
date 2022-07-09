@@ -80,7 +80,7 @@ class Tsdb implements ITsdb {
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
       const newRef = ref + '/' + key;
-      const newRefArray: string[] = new Array(refArray.length + 1);
+      const newRefArray = new Array<string>(refArray.length + 1);
       for (let i = 0; i < refArray.length; i++) {
         newRefArray[i] = refArray[i];
       }
